@@ -1,0 +1,6 @@
+fastapi==0.115.0
+uvicorn==0.32.0
+pydantic==2.9.2
+supabase==2.7.4
+litellm==1.55.0  # Unified LLM switching
+python-dotenv==1.0.1
