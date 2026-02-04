@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Interview - NexusAI Hire</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            200: '#c7d2fe',
+                            300: '#a5b4fc',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81',
+                        },
+                        secondary: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            200: '#a7f3d0',
+                            300: '#6ee7b7',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .code-font { font-family: 'JetBrains Mono', monospace; }
+        .typing-indicator::after {
+            content: '...';
+            animation: typing 1.5s infinite;
+        }
+        @keyframes typing {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .pulse-ring {
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.8; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 antialiased h-screen overflow-hidden">
+    <script src="components/navbar.js"></script>
+    <script src="components/model-selector.js"></script>
+
+    <div class="flex h-full">
+        <!-- Left Panel: Video & Controls -->
+        <div class="w-1/3 min-w-[400px] bg-slate-900 border-r border-slate-800 flex flex-col">
+            <div class="p-6 border-b border-slate-800">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold text-white">Interview Session</h2>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                        <span class="text-sm text-red-400 font-medium">LIVE</span>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-3 mb-4">
+                    <img src="https://static.photos/people/48x48/42" alt="Candidate" class="w-12 h-12 rounded-full object-cover border-2 border-primary-500">
+                    <div>
+                        <div class="font-semibold text-white">Alex Thompson</div>
+                        <div class="text-sm text-slate-400">Senior Full Stack Engineer</div>
+                    </div>
+                </div>
+
+                <nexus-model-selector></nexus-model-selector>
+            </div>
+
+            <!-- Video Feed Placeholder -->
+            <div class="flex-1 relative bg-slate-950 m-6 rounded-2xl overflow-hidden border border-slate-800">
+                <img src="https://static.photos/office/640x480/42" alt="Candidate Video" class="w-full h-full object-cover opacity-80">
+                
+                <!-- Recording Indicator -->
+                <div class="absolute top-4 left-4 flex items-center gap-2 bg-black/50 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/10">
+                    <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                    <span class="text-xs font-mono text-white">REC 14:32</span>
+                </div>
+
+                <!-- Trust Score Overlay -->
+                <div class="absolute top-4 right-4 bg-slate-900/90 backdrop-blur-md px-4 py-2 rounded-xl border border-slate-700">
+                    <div class="text-xs text-slate-400 mb-1">Trust Score</div>
+                    <div class="flex items-center gap-2">
+                        <div class="text-2xl font-bold text-secondary-400">94</div>
+                        <div class="w-16 h-1.5 bg-slate-700 rounded-full overflow-hidden">
+                            <div class="h-full bg-secondary-500 w-[94%] rounded-full"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Proctoring Alerts -->
+                <div id="proctoring-alerts" class="absolute bottom-4 left-4 right-4 space-y-2">
+                    <div class="hidden bg-orange-500/20 border border-orange-500/30 backdrop-blur-sm px-4 py-2 rounded-xl flex items-center gap-2 text-orange-300 text-sm">
+                        <i data-feather="alert-triangle" class="w-4 h-4"></i>
+                        <span>Multiple faces detected</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="p-6 border-t border-slate-800">
+                <div class="grid grid-cols-4 gap-3 mb-4">
+                    <button class="p-3 bg-slate-800 hover:bg-slate-700 rounded-xl transition-colors flex flex-col items-center gap-1 group">
+                        <i data-feather="mic" class="w-5 h-5 text-slate-400 group-hover:text-white"></i>
+                        <span class="text-xs text-slate-500">Mute</span>
+                    </button>
+                    <button class="p-3 bg-slate-800 hover:bg-slate-700 rounded-xl transition-colors flex flex-col items-center gap-1 group">
+                        <i data-feather="video" class="w-5 h-5 text-slate-400 group-hover:text-white"></i>
+                        <span class="text-xs text-slate-500">Camera</span>
+                    </button>
+                    <button class="p-3 bg-slate-800 hover:bg-slate-700 rounded-xl transition-colors flex flex-col items-center gap-1 group">
+                        <i data-feather="monitor" class="w-5 h-5 text-slate-400 group-hover:text-white"></i>
+                        <span class="text-xs text-slate-500">Screen</span>
+                    </button>
+                    <button onclick="endInterview()" class="p-3 bg-red-500/20 hover:bg-red-500/30 rounded-xl transition-colors flex flex-col items-center gap-1 group border border-red-500/30">
+                        <i data-feather="phone-off" class="w-5 h-5 text-red-400"></i>
+                        <span class="text-xs text-red-400">End</span>
+                    </button>
+                </div>
+                <button onclick="toggleProctoring()" id="proctor-btn" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm rounded-lg transition-colors flex items-center justify-center gap-2">
+                    <i data-feather="shield" class="w-4 h-4"></i>
+                    <span>Proctoring Active</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Right Panel: Chat & Code -->
+        <div class="flex-1 flex flex-col bg-slate-950">
+            <!-- Chat Header -->
+            <div class="h-16 border-b border-slate-800 flex items-center justify-between px-6 bg-slate-900/50">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-primary-500/20 rounded-lg flex items-center justify-center">
+                        <i data-feather="cpu" class="w-4 h-4 text-primary-400"></i>
+                    </div>
+                    <span class="font-medium text-white">AI Interviewer</span>
+                    <span class="text-xs bg-primary-500/20 text-primary-300 px-2 py-0.5 rounded-full">GPT-4o</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="clearChat()" class="p-2 text-slate-400 hover:text-white transition-colors">
+                        <i data-feather="trash-2" class="w-5 h-5"></i>
+                    </button>
+                    <button class="p-2 text-slate-400 hover:text-white transition-colors">
+                        <i data-feather="settings" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div id="chat-container" class="flex-1 overflow-y-auto p-6 space-y-6">
+                <!-- Welcome Message -->
+                <div class="flex gap-4">
+                    <div class="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <i data-feather="bot" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="glass-panel rounded-2xl rounded-tl-none p-4 max-w-3xl">
+                            <p class="text-slate-200 leading-relaxed">
+                                Hello Alex! Welcome to your technical interview for the Senior Full Stack Engineer position. 
+                                I'll be conducting this adaptive assessment today. We'll cover system design, coding challenges, 
+                                and behavioral questions. Are you ready to begin?
+                            </p>
+                        </div>
+                        <div class="text-xs text-slate-500 mt-2 ml-1">10:00 AM • AI Interviewer</div>
+                    </div>
+                </div>
+
+                <!-- Candidate Message -->
+                <div class="flex gap-4 flex-row-reverse">
+                    <div class="w-8 h-8 bg-slate-700 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <i data-feather="user" class="w-5 h-5 text-slate-300"></i>
+                    </div>
+                    <div class="flex-1 flex flex-col items-end">
+                        <div class="glass-panel rounded-2xl rounded-tr-none p-4 max-w-3xl bg-slate-800/50">
+                            <p class="text-slate-200 leading-relaxed">
+                                Yes, I'm ready! Looking forward to the assessment.
+                            </p>
+                        </div>
+                        <div class="text-xs text-slate-500 mt-2 mr-1">10:01 AM • You</div>
+                    </div>
+                </div>
+
+                <!-- Question with Code -->
+                <div class="flex gap-4">
+                    <div class="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <i data-feather="bot" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="glass-panel rounded-2xl rounded-tl-none p-4 max-w-3xl">
+                            <p class="text-slate-200 leading-relaxed mb-4">
+                                Great! Let's start with a coding challenge. Please implement a function to find the longest 
+                                substring without repeating characters. Here's the starter code:
+                            </p>
+                            <div class="bg-slate-950 rounded-xl p-4 border border-slate-800 code-font text-sm text-slate-300 overflow-x-auto">
+                                <pre><code>function lengthOfLongestSubstring(s) {
+    // Your implementation here
+    
+}</code></pre>
+                            </div>
+                            <div class="mt-4 flex gap-2">
+                                <span class="text-xs bg-slate-700 text-slate-300 px-2 py-1 rounded">JavaScript</span>
+                                <span class="text-xs bg-slate-700 text-slate-300 px-2 py-1 rounded">Medium</span>
+                                <span class="text-xs bg-slate-700 text-slate-300 px-2 py-1 rounded">15 min</span>
+                            </div>
+                        </div>
+                        <div class="text-xs text-slate-500 mt-2 ml-1">10:02 AM • AI Interviewer</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="p-6 border-t border-slate-800 bg-slate-900/50">
+                <div class="glass-panel rounded-xl p-2 flex items-end gap-2">
+                    <button class="p-3 text-slate-400 hover:text-white transition-colors">
+                        <i data-feather="paperclip" class="w-5 h-5"></i>
+                    </button>
+                    <textarea id="message-input" rows="1" class="flex-1 bg-transparent border-none text-white placeholder-slate-500 resize-none focus:outline-none py-3 max-h-32" placeholder="Type your response..."></textarea>
+                    <button onclick="sendMessage()" class="p-3 bg-primary-600 hover:bg-primary-500 text-white rounded-lg transition-colors">
+                        <i data-feather="send" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                <div class="text-center mt-2">
+                    <span class="text-xs text-slate-500">Press Enter to send, Shift+Enter for new line</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- End Interview Modal -->
+    <div id="end-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl p-8 max-w-md w-full mx-4">
+            <div class="w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i data-feather="alert-circle" class="w-6 h-6 text-red-500"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-center text-white mb-2">End Interview?</h3>
+            <p class="text-slate-400 text-center mb-6">This will finalize the session and generate the assessment report. This action cannot be undone.</p>
+            <div class="flex gap-3">
+                <button onclick="document.getElementById('end-modal').classList.add('hidden')" class="flex-1 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl transition-colors">
+                    Cancel
+                </button>
+                <button onclick="confirmEndInterview()" class="flex-1 py-3 bg-red-600 hover:bg-red-500 text-white rounded-xl transition-colors">
+                    End Session
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        feather.replace();
+        
+        // Auto-resize textarea
+        const textarea = document.getElementById('message-input');
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 128) + 'px';
+        });
+
+        // Send message on Enter
+        textarea.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            const input = document.getElementById('message-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            // Add user message
+            addMessage(text, 'user');
+            input.value = '';
+            input.style.height = 'auto';
+
+            // Simulate AI typing
+            setTimeout(() => {
+                showTypingIndicator();
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    addMessage("Interesting approach! Could you explain the time complexity of your solution and how you might optimize it for larger inputs?", 'ai');
+                }, 2000);
+            }, 500);
+        }
+
+        function addMessage(text, sender) {
+            const container = document.getElementById('chat-container');
+            const isAI = sender === 'ai';
+            
+            const html = `
+                <div class="flex gap-4 ${isAI ? '' : 'flex-row-reverse'} animate-fade-in">
+                    <div class="w-8 h-8 ${isAI ? 'bg-primary-500' : 'bg-slate-700'} rounded-lg flex items-center justify-center flex-shrink-0">
+                        <i data-feather="${isAI ? 'bot' : 'user'}" class="w-5 h-5 ${isAI ? 'text-white' : 'text-slate-300'}"></i>
+                    </div>
+                    <div class="flex-1 ${isAI ? '' : 'flex flex-col items-end'}">
+                        <div class="glass-panel rounded-2xl ${isAI ? 'rounded-tl-none' : 'rounded-tr-none'} p-4 max-w-3xl ${isAI ? '' : 'bg-slate-800/50'}">
+                            <p class="text-slate-200 leading-relaxed">${text}</p>
+                        </div>
+                        <div class="text-xs text-slate-500 mt-2 ${isAI ? 'ml-1' : 'mr-1'}">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} • ${isAI ? 'AI Interviewer' : 'You'}</div>
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', html);
+            container.scrollTop = container.scrollHeight;
+            feather.replace();
+        }
+
+        function showTypingIndicator() {
+            const container = document.getElementById('chat-container');
+            const html = `
+                <div id="typing-indicator" class="flex gap-4 animate-fade-in">
+                    <div class="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <i data-feather="bot" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="glass-panel rounded-2xl rounded-tl-none p-4 max-w-3xl">
+                            <span class="text-slate-400 typing-indicator">AI is thinking</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typing-indicator');
+            if (indicator) indicator.remove();
+        }
+
+        function endInterview() {
+            document.getElementById('end-modal').classList.remove('hidden');
+        }
+
+        function confirmEndInterview() {
+            document.getElementById('end-modal').classList.add('hidden');
+            // Redirect to dashboard with success message
+            window.location.href = 'dashboard.html?interview=ended';
+        }
+
+        function clearChat() {
+            if (confirm('Clear all messages? This cannot be undone.')) {
+                document.getElementById('chat-container').innerHTML = '';
+            }
+        }
+
+        let proctoringActive = true;
+        function toggleProctoring() {
+            proctoringActive = !proctoringActive;
+            const btn = document.getElementById('proctor-btn');
+            if (proctoringActive) {
+                btn.innerHTML = '<i data-feather="shield" class="w-4 h-4"></i><span>Proctoring Active</span>';
+                btn.classList.remove('text-orange-400');
+                btn.classList.add('text-slate-300');
+            } else {
+                btn.innerHTML = '<i data-feather="shield-off" class="w-4 h-4"></i><span>Proctoring Paused</span>';
+                btn.classList.remove('text-slate-300');
+                btn.classList.add('text-orange-400');
+            }
+            feather.replace();
+        }
+
+        // Simulate random proctoring alert
+        setTimeout(() => {
+            if (Math.random() > 0.7) {
+                const alert = document.querySelector('#proctoring-alerts > div');
+                alert.classList.remove('hidden');
+                setTimeout(() => alert.classList.add('hidden'), 5000);
+            }
+        }, 10000);
+    </script>
+</body>
+</html>
