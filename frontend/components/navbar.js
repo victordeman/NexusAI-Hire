@@ -1,4 +1,3 @@
-///remove////---components/navbar.js
 class NexusNavbar extends HTMLElement {
     constructor() {
         super();
