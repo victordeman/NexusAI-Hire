@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusAI Hire - AI-Powered Interview Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            200: '#c7d2fe',
+                            300: '#a5b4fc',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81',
+                        },
+                        secondary: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            200: '#a7f3d0',
+                            300: '#6ee7b7',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        }
+                    },
+                    animation: {
+                        'gradient-x': 'gradient-x 15s ease infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        'gradient-x': {
+                            '0%, 100%': {
+                                'background-size': '200% 200%',
+                                'background-position': 'left center'
+                            },
+                            '50%': {
+                                'background-size': '200% 200%',
+                                'background-position': 'right center'
+                            },
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e293b 100%);
+        }
+        .text-gradient {
+            background: linear-gradient(to right, #818cf8, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 antialiased">
+    <script src="components/navbar.js"></script>
+    <script src="components/footer.js"></script>
+    
+    <nexus-navbar></nexus-navbar>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden hero-gradient">
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%234f46e5" fill-opacity="0.05"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-4xl mx-auto text-center">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-500/10 border border-primary-500/20 text-primary-300 text-sm font-medium mb-8 animate-pulse-slow">
+                    <i data-feather="zap" class="w-4 h-4"></i>
+                    <span>AI-Powered Hiring Revolution</span>
+                </div>
+                
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                    Hire Smarter with <br>
+                    <span class="text-gradient">Adaptive AI Interviews</span>
+                </h1>
+                
+                <p class="text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+                    Automate technical screenings with intelligent voice/video interviews. 
+                    Dynamic LLM switching, real-time proctoring, and trust scoring—all in one platform.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <a href="dashboard.html" class="group relative px-8 py-4 bg-primary-600 hover:bg-primary-500 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-primary-600/25 hover:shadow-primary-600/40 flex items-center gap-2">
+                        <span>Start Recruiting</span>
+                        <i data-feather="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                    <a href="interview.html" class="px-8 py-4 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-xl transition-all duration-300 border border-slate-700 flex items-center gap-2">
+                        <i data-feather="play-circle" class="w-5 h-5"></i>
+                        <span>Demo Interview</span>
+                    </a>
+                </div>
+
+                <!-- Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20 pt-10 border-t border-slate-800">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-white mb-1">10x</div>
+                        <div class="text-slate-400 text-sm">Faster Screening</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-secondary-400 mb-1">95%</div>
+                        <div class="text-slate-400 text-sm">Accuracy Rate</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-primary-400 mb-1">50+</div>
+                        <div class="text-slate-400 text-sm">LLM Models</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Elements -->
+        <div class="absolute top-20 left-10 w-20 h-20 bg-primary-500/20 rounded-full blur-xl animate-pulse"></div>
+        <div class="absolute bottom-20 right-10 w-32 h-32 bg-secondary-500/20 rounded-full blur-xl animate-pulse delay-700"></div>
+    </section>
+
+    <!-- Features Grid -->
+    <section class="py-24 bg-slate-950">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Intelligent Hiring Features</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Everything you need to conduct scalable, fair, and efficient technical interviews.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="glass-panel rounded-2xl p-8 hover:bg-slate-800/50 transition-all duration-300 group">
+                    <div class="w-12 h-12 bg-primary-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-feather="cpu" class="w-6 h-6 text-primary-400"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-white">Dynamic LLM Switching</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Seamlessly switch between OpenAI, Gemini, or local Ollama models based on your privacy needs and budget constraints.
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="glass-panel rounded-2xl p-8 hover:bg-slate-800/50 transition-all duration-300 group">
+                    <div class="w-12 h-12 bg-secondary-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-feather="shield" class="w-6 h-6 text-secondary-400"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-white">AI Proctoring</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Real-time trust scoring with behavioral analysis, tab-switching detection, and identity verification built-in.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="glass-panel rounded-2xl p-8 hover:bg-slate-800/50 transition-all duration-300 group">
+                    <div class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-feather="mic" class="w-6 h-6 text-purple-400"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-white">Voice & Video</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Natural conversational interviews with speech-to-text and video analysis for comprehensive candidate evaluation.
+                    </p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="glass-panel rounded-2xl p-8 hover:bg-slate-800/50 transition-all duration-300 group">
+                    <div class="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-feather="bar-chart-2" class="w-6 h-6 text-orange-400"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-white">Analytics Dashboard</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Deep insights into candidate performance, comparative analysis, and automated skill gap identification.
+                    </p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="glass-panel rounded-2xl p-8 hover:bg-slate-800/50 transition-all duration-300 group">
+                    <div class="w-12 h-12 bg-pink-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-feather="code" class="w-6 h-6 text-pink-400"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-white">Live Coding</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Integrated IDE with real-time collaboration, syntax highlighting, and AI-assisted code evaluation.
+                    </p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="glass-panel rounded-2xl p-8 hover:bg-slate-800/50 transition-all duration-300 group">
+                    <div class="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-feather="git-branch" class="w-6 h-6 text-cyan-400"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-white">Workflow Integration</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Connect with your existing ATS, Slack, and calendar systems for seamless recruitment pipeline management.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-24 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary-900/50 to-secondary-900/50"></div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="glass-panel rounded-3xl p-12 md:p-20 text-center max-w-4xl mx-auto">
+                <h2 class="text-3xl md:text-5xl font-bold mb-6">Ready to Transform Your Hiring?</h2>
+                <p class="text-slate-300 text-lg mb-8 max-w-2xl mx-auto">
+                    Join leading tech companies using NexusAI to reduce time-to-hire by 80% while improving candidate quality.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="dashboard.html" class="px-8 py-4 bg-white text-slate-900 font-bold rounded-xl hover:bg-slate-100 transition-colors shadow-xl">
+                        Get Started Free
+                    </a>
+                    <button onclick="document.getElementById('demo-modal').classList.remove('hidden')" class="px-8 py-4 bg-transparent border-2 border-slate-400 text-slate-300 font-semibold rounded-xl hover:border-white hover:text-white transition-colors">
+                        Schedule Demo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <nexus-footer></nexus-footer>
+
+    <!-- Demo Modal -->
+    <div id="demo-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl p-8 max-w-md w-full mx-4 relative">
+            <button onclick="document.getElementById('demo-modal').classList.add('hidden')" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <i data-feather="x" class="w-6 h-6"></i>
+            </button>
+            <h3 class="text-2xl font-bold mb-4">Request Demo</h3>
+            <p class="text-slate-400 mb-6">Enter your email and we'll schedule a personalized walkthrough.</p>
+            <input type="email" placeholder="you@company.com" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-primary-500 mb-4">
+            <button onclick="document.getElementById('demo-modal').classList.add('hidden')" class="w-full py-3 bg-primary-600 hover:bg-primary-500 text-white font-semibold rounded-xl transition-colors">
+                Request Access
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>feather.replace();</script>
+</body>
+</html>
