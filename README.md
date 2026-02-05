@@ -1,6 +1,6 @@
 # NexusAI Hire
 
-AI-powered automated interview platform with adaptive voice/video, proctoring, and trust scoring.
+This project develops an AI-powered automated interview platform that leverages a Multi-AI-Agent architecture using LiteLLM to conduct adaptive text-based interviews with dynamic LLM switching. The system supports recruiter dashboards, real-time proctoring simulations, and trust scoring, targeting efficient technical screenings for hiring teams. It combines a FastAPI backend for LLM interactions with a static frontend for user interfaces..
 
 ## Features (MVP + Enhancements)
 - **Adaptive Interviews**: Text-based chat interviews with dynamic questioning (voice/video planned).
