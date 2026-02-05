@@ -13,6 +13,36 @@ AI-powered automated interview platform with adaptive voice/video, proctoring, a
 - **Auth/Database**: Supabase integration (configured but not yet wired in enhanced code).
 - **Additional**: Simulated typing indicators, auto-resizing inputs, theme toggling, and basic animations.
 
+## Repository Structure
+```
+NexusAI-Hire/
+├── backend/
+│   ├── app/
+│   │   ├── api/
+│   │   │   └── v1/
+│   │   │       └── interview.py  # API endpoint for asking questions
+│   │   ├── models/
+│   │   │   └── llm.py  # LLM response handler via LiteLLM
+│   │   ├── config.py  # Environment config loader
+│   │   └── main.py  # FastAPI app entry with CORS
+│   └── requirements.txt  # Python dependencies (FastAPI, LiteLLM, etc.)
+├── docs/
+│   └── architecture.md  # High-level system diagram (Mermaid graph)
+├── frontend/
+│   ├── components/
+│   │   ├── ModelSelector.js  # Web component for LLM dropdown
+│   │   ├── navbar.js  # Web component for top nav
+│   │   └── sidebar.js  # Web component for side nav
+│   ├── dashboard.html  # Recruiter dashboard page
+│   ├── index.html  # Landing page
+│   ├── interview.html  # Interview simulation page
+│   ├── interview_connected.html  # Connected version (optional; merge into interview.html)
+│   ├── script.js  # Shared utilities (e.g., time formatting, mock API)
+│   └── style.css  # Global styles (dark theme, glass panels)
+└── README.md  # This file
+text
+```
+
 ### New Changes
 #### Frontend Updates
 - Added static HTML pages: `index.html` (landing/hero), `dashboard.html` (stats, live interviews, assessments), `interview.html` (video/chat/code interface with proctoring overlays).
@@ -52,12 +82,3 @@ No breaking changes; original bash setup remains compatible, but frontend now ru
 - Run backend + frontend simultaneously.
 - In interview page: Select model, send message → verifies connection.
 - Notes: Chat is single-turn (no history yet); trust score mocked.
-
-## Architecture
-```mermaid
-graph TD
-    F[Frontend: Static HTML + Web Components] -->|POST /api/v1/ask| B[FastAPI Backend]
-    B --> C[LiteLLM Proxy]
-    C --> D[LLMs: OpenAI/Gemini/Ollama/Anthropic]
-    B --> E[Supabase DB (future sessions/proctoring)]
-    F -->|LocalStorage| M[Model Selection Persistence]
