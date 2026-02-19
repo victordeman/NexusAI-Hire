@@ -1,74 +1,81 @@
-// frontend/components/trust-score.js
 class NexusTrustScore extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
     }
 
-    connectedCallback() {
-        this.render();
-    }
-
     static get observedAttributes() {
         return ['score'];
     }
 
-    attributeChangedCallback() {
+    attributeChangedCallback(name, oldValue, newValue) {
+        if (name === 'score' && oldValue !== newValue) {
+            this.render();
+        }
+    }
+
+    connectedCallback() {
         this.render();
     }
 
     render() {
         const score = parseInt(this.getAttribute('score') || '0');
-        const color = score >= 90 ? '#10b981' : score >= 80 ? '#f59e0b' : '#ef4444';
-        
-        // Circular progress calculation
-        const radius = 18;
+        const radius = 28;
         const circumference = 2 * Math.PI * radius;
         const offset = circumference - (score / 100) * circumference;
+
+        let color = '#10b981'; // Default green
+        if (score < 70) color = '#ef4444'; // Red
+        else if (score < 85) color = '#f59e0b'; // Orange
 
         this.shadowRoot.innerHTML = `
             <style>
                 :host {
                     display: inline-block;
                 }
-                .container {
+                .trust-score-ring {
                     position: relative;
-                    width: 48px;
-                    height: 48px;
+                    width: 64px;
+                    height: 64px;
                     display: flex;
-                    align-items: center;
+                    items-center: center;
                     justify-content: center;
                 }
                 svg {
                     transform: rotate(-90deg);
+                    width: 64px;
+                    height: 64px;
                 }
                 circle {
                     fill: none;
-                    stroke-width: 3;
+                    stroke-width: 4;
                 }
                 .bg {
-                    stroke: rgba(255, 255, 255, 0.05);
+                    stroke: #1e293b;
                 }
                 .progress {
                     stroke: ${color};
-                    stroke-dasharray: ${circumference};
-                    stroke-dashoffset: ${offset};
                     stroke-linecap: round;
                     transition: stroke-dashoffset 0.5s ease;
+                    stroke-dasharray: ${circumference};
+                    stroke-dashoffset: ${offset};
                 }
-                .text {
+                .trust-score-text {
                     position: absolute;
-                    font-size: 0.75rem;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    font-size: 0.875rem;
                     font-weight: 700;
-                    color: ${color};
+                    color: white;
                 }
             </style>
-            <div class="container">
-                <svg width="44" height="44">
-                    <circle class="bg" cx="22" cy="22" r="${radius}"></circle>
-                    <circle class="progress" cx="22" cy="22" r="${radius}"></circle>
+            <div class="trust-score-ring">
+                <svg>
+                    <circle class="bg" cx="32" cy="32" r="${radius}"></circle>
+                    <circle class="progress" cx="32" cy="32" r="${radius}"></circle>
                 </svg>
-                <span class="text">${score}</span>
+                <div class="trust-score-text">${score}</div>
             </div>
         `;
     }
