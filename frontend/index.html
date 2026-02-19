@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexusAI Hire - AI-Powered Interview Platform</title>
+    <meta name="description" content="NexusAI Hire - The next-gen AI-powered technical interview platform. Automate screenings with adaptive AI, real-time proctoring, and deep talent insights.">
+    <meta name="keywords" content="AI interviews, technical screening, recruitment automation, LLM, proctoring, hiring platform">
+    <title>NexusAI Hire | AI-Powered Technical Interview Platform</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="components/navbar.js"></script>
+    <script src="components/footer.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -79,9 +82,6 @@
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 antialiased">
-    <script src="components/navbar.js"></script>
-    <script src="components/footer.js"></script>
-    
     <nexus-navbar></nexus-navbar>
 
     <!-- Hero Section -->
@@ -95,14 +95,14 @@
                     <span>AI-Powered Hiring Revolution</span>
                 </div>
                 
-                <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-                    Hire Smarter with <br>
-                    <span class="text-gradient">Adaptive AI Interviews</span>
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight tracking-tight">
+                    Scale Your Engineering <br>
+                    <span class="text-gradient">Team with Confidence</span>
                 </h1>
                 
-                <p class="text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-                    Automate technical screenings with intelligent voice/video interviews. 
-                    Dynamic LLM switching, real-time proctoring, and trust scoring—all in one platform.
+                <p class="text-xl text-slate-300 mb-10 max-w-2xl mx-auto leading-relaxed opacity-90">
+                    NexusAI automates your technical funnel with adaptive LLM-driven interviews.
+                    Get deep signal on candidate skills without wasting engineering hours.
                 </p>
                 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -217,6 +217,107 @@
         </div>
     </section>
 
+    <!-- Trusted By Section -->
+    <section class="py-20 bg-slate-900/50 border-y border-slate-800">
+        <div class="container mx-auto px-6">
+            <p class="text-center text-slate-500 text-sm font-semibold uppercase tracking-widest mb-12">Trusted by Industry Leaders</p>
+            <div class="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+                <div class="text-2xl font-bold text-slate-300">TECHCORP</div>
+                <div class="text-2xl font-bold text-slate-300">NOVANET</div>
+                <div class="text-2xl font-bold text-slate-300">QUANTUM</div>
+                <div class="text-2xl font-bold text-slate-300">STELLAR</div>
+                <div class="text-2xl font-bold text-slate-300">APEX</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-24 bg-slate-950">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">How It Works</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Three simple steps to revolutionize your hiring pipeline.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-primary-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6 text-primary-400 font-bold text-2xl border border-primary-500/20">1</div>
+                    <h3 class="text-xl font-semibold mb-3 text-white">Configure Interview</h3>
+                    <p class="text-slate-400 text-sm">Upload your JD or select from templates. Choose your preferred AI model and difficulty level.</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-secondary-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6 text-secondary-400 font-bold text-2xl border border-secondary-500/20">2</div>
+                    <h3 class="text-xl font-semibold mb-3 text-white">AI Conducts Interview</h3>
+                    <p class="text-slate-400 text-sm">Candidates undergo an adaptive session with real-time coding, voice, and behavioral analysis.</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6 text-purple-400 font-bold text-2xl border border-purple-500/20">3</div>
+                    <h3 class="text-xl font-semibold mb-3 text-white">Review & Hire</h3>
+                    <p class="text-slate-400 text-sm">Get a detailed report with trust scores, skill breakdown, and interview recording immediately.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="py-24 bg-slate-900/30">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Simple, Transparent Pricing</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Choose the plan that fits your recruitment scale.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Starter -->
+                <div class="glass-panel rounded-3xl p-8 border-slate-800">
+                    <h3 class="text-lg font-semibold text-white mb-2">Starter</h3>
+                    <div class="flex items-baseline gap-1 mb-6">
+                        <span class="text-4xl font-bold text-white">$0</span>
+                        <span class="text-slate-400">/month</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 text-sm text-slate-300">
+                        <li class="flex items-center gap-2"><i data-feather="check" class="w-4 h-4 text-secondary-400"></i> 5 Interviews / mo</li>
+                        <li class="flex items-center gap-2"><i data-feather="check" class="w-4 h-4 text-secondary-400"></i> GPT-4o-mini access</li>
+                        <li class="flex items-center gap-2"><i data-feather="check" class="w-4 h-4 text-secondary-400"></i> Basic Analytics</li>
+                    </ul>
+                    <a href="#" class="block text-center py-3 px-6 rounded-xl border border-slate-700 hover:bg-slate-800 transition-colors text-white font-medium">Start Free</a>
+                </div>
+
+                <!-- Pro -->
+                <div class="glass-panel rounded-3xl p-8 border-primary-500/50 relative">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary-600 text-white text-xs font-bold rounded-full">MOST POPULAR</div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Pro</h3>
+                    <div class="flex items-baseline gap-1 mb-6">
+                        <span class="text-4xl font-bold text-white">$499</span>
+                        <span class="text-slate-400">/month</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 text-sm text-slate-300">
+                        <li class="flex items-center gap-2"><i data-feather="check" class="w-4 h-4 text-secondary-400"></i> 50 Interviews / mo</li>
+                        <li class="flex items-center gap-2"><i data-feather="check" class="w-4 h-4 text-secondary-400"></i> All Premium Models</li>
+                        <li class="flex items-center gap-2"><i data-feather="check" class="w-4 h-4 text-secondary-400"></i> Advanced Proctoring</li>
+                        <li class="flex items-center gap-2"><i data-feather="check" class="w-4 h-4 text-secondary-400"></i> ATS Integration</li>
+                    </ul>
+                    <a href="#" class="block text-center py-3 px-6 rounded-xl bg-primary-600 hover:bg-primary-500 transition-colors text-white font-medium">Upgrade to Pro</a>
+                </div>
+
+                <!-- Enterprise -->
+                <div class="glass-panel rounded-3xl p-8 border-slate-800">
+                    <h3 class="text-lg font-semibold text-white mb-2">Enterprise</h3>
+                    <div class="flex items-baseline gap-1 mb-6">
+                        <span class="text-4xl font-bold text-white">Custom</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 text-sm text-slate-300">
+                        <li class="flex items-center gap-2"><i data-feather="check" class="w-4 h-4 text-secondary-400"></i> Unlimited Interviews</li>
+                        <li class="flex items-center gap-2"><i data-feather="check" class="w-4 h-4 text-secondary-400"></i> Custom Model Tuning</li>
+                        <li class="flex items-center gap-2"><i data-feather="check" class="w-4 h-4 text-secondary-400"></i> Dedicated Support</li>
+                        <li class="flex items-center gap-2"><i data-feather="check" class="w-4 h-4 text-secondary-400"></i> On-premise Options</li>
+                    </ul>
+                    <button onclick="document.getElementById('demo-modal').classList.remove('hidden')" class="w-full text-center py-3 px-6 rounded-xl border border-slate-700 hover:bg-slate-800 transition-colors text-white font-medium">Contact Sales</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- CTA Section -->
     <section class="py-24 relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-r from-primary-900/50 to-secondary-900/50"></div>
@@ -238,8 +339,6 @@
         </div>
     </section>
 
-    <nexus-footer></nexus-footer>
-
     <!-- Demo Modal -->
     <div id="demo-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
         <div class="bg-slate-900 border border-slate-700 rounded-2xl p-8 max-w-md w-full mx-4 relative">
@@ -249,13 +348,45 @@
             <h3 class="text-2xl font-bold mb-4">Request Demo</h3>
             <p class="text-slate-400 mb-6">Enter your email and we'll schedule a personalized walkthrough.</p>
             <input type="email" placeholder="you@company.com" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-primary-500 mb-4">
-            <button onclick="document.getElementById('demo-modal').classList.add('hidden')" class="w-full py-3 bg-primary-600 hover:bg-primary-500 text-white font-semibold rounded-xl transition-colors">
+            <button id="demo-submit-btn" onclick="handleDemoRequest()" class="w-full py-3 bg-primary-600 hover:bg-primary-500 text-white font-semibold rounded-xl transition-colors">
                 Request Access
             </button>
         </div>
     </div>
 
+    <nexus-footer></nexus-footer>
+
     <script src="script.js"></script>
-    <script>feather.replace();</script>
+    <script>
+        feather.replace();
+
+        // Modal Form Handling
+        function handleDemoRequest() {
+            const emailInput = document.querySelector('#demo-modal input[type="email"]');
+            const email = emailInput.value;
+            if (email && email.includes('@')) {
+                const btn = document.getElementById('demo-submit-btn');
+                const originalText = btn.innerText;
+                btn.innerText = 'Request Sent!';
+                btn.classList.remove('bg-primary-600');
+                btn.classList.add('bg-secondary-600');
+                btn.disabled = true;
+
+                setTimeout(() => {
+                    document.getElementById('demo-modal').classList.add('hidden');
+                    // Reset button after modal closes
+                    setTimeout(() => {
+                        btn.innerText = originalText;
+                        btn.classList.remove('bg-secondary-600');
+                        btn.classList.add('bg-primary-600');
+                        btn.disabled = false;
+                        emailInput.value = '';
+                    }, 500);
+                }, 1500);
+            } else {
+                alert('Please enter a valid work email.');
+            }
+        }
+    </script>
 </body>
 </html>
