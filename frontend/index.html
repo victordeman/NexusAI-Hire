@@ -8,7 +8,7 @@
     <title>NexusAI Hire | AI-Powered Technical Interview Platform</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
     <script src="components/navbar.js"></script>
     <script src="components/footer.js"></script>
     <script>
@@ -358,34 +358,13 @@
 
     <script src="script.js"></script>
     <script>
-        feather.replace();
-        
         // Modal Form Handling
         function handleDemoRequest() {
-            const emailInput = document.querySelector('#demo-modal input[type="email"]');
-            const email = emailInput.value;
-            if (email && email.includes('@')) {
-                const btn = document.getElementById('demo-submit-btn');
-                const originalText = btn.innerText;
-                btn.innerText = 'Request Sent!';
-                btn.classList.remove('bg-primary-600');
-                btn.classList.add('bg-secondary-600');
-                btn.disabled = true;
-                
-                setTimeout(() => {
-                    document.getElementById('demo-modal').classList.add('hidden');
-                    // Reset button after modal closes
-                    setTimeout(() => {
-                        btn.innerText = originalText;
-                        btn.classList.remove('bg-secondary-600');
-                        btn.classList.add('bg-primary-600');
-                        btn.disabled = false;
-                        emailInput.value = '';
-                    }, 500);
-                }, 1500);
-            } else {
-                alert('Please enter a valid work email.');
-            }
+            NexusAI.UI.Forms.handleDemoRequest(
+                '#demo-modal input[type="email"]',
+                '#demo-submit-btn',
+                '#demo-modal'
+            );
         }
     </script>
 </body>
