@@ -63,40 +63,61 @@ const Utils = {
             return null;
         }
         return item.value;
+    },
+
+    // Logger utility
+    log: (msg, type = 'info') => {
+        const timestamp = new Date().toLocaleTimeString();
+        const colors = {
+            info: '#6366f1',
+            success: '#10b981',
+            warning: '#f59e0b',
+            error: '#ef4444'
+        };
+        console.log(
+            `%c[NexusAI ${timestamp}] %c${msg}`, 
+            `color: ${colors[type] || colors.info}; font-weight: bold`, 
+            'color: inherit'
+        );
     }
 };
 
-// API Simulation (would connect to real FastAPI backend)
+// API Integration
 const API = {
+    // Real API call to get LLM response
+    ask: async (question, model) => {
+        try {
+            Utils.log(`Sending question to ${model || 'default model'}...`);
+            const response = await fetch('/api/v1/ask', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    question: question,
+                    model: model
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Server responded with ${response.status}`);
+            }
+
+            const data = await response.json();
+            Utils.log('Received response from API', 'success');
+            return data;
+        } catch (error) {
+            Utils.log(`API Error: ${error.message}`, 'error');
+            throw error;
+        }
+    },
+
     // Simulate interview session creation
     createInterview: async (candidateData) => {
-        // Simulate API delay
         await new Promise(resolve => setTimeout(resolve, 800));
         return {
             id: 'int_' + Math.random().toString(36).substr(2, 9),
             status: 'created',
             url: `/interview.html?id=${Math.random().toString(36).substr(2, 9)}`,
             created_at: new Date().toISOString()
-        };
-    },
-
-    // Simulate LLM response
-    getLLMResponse: async (message, model = 'gpt-4o-mini') => {
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        
-        const responses = [
-            "That's an interesting approach. Can you elaborate on the time complexity?",
-            "How would you handle edge cases in this scenario?",
-            "Could you optimize this solution for better space complexity?",
-            "What trade-offs did you consider when choosing this data structure?",
-            "Let's move on to system design. How would you architect a scalable solution?"
-        ];
-        
-        return {
-            response: responses[Math.floor(Math.random() * responses.length)],
-            model: model,
-            tokens: Math.floor(Math.random() * 100) + 50,
-            trust_score: Utils.generateTrustScore()
         };
     },
 
@@ -115,20 +136,131 @@ const API = {
     }
 };
 
+// UI Components & Utilities
+const UI = {
+    Chat: {
+        renderMessage: (containerId, text, sender) => {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const div = document.createElement('div');
+            div.className = `flex gap-4 ${sender === 'user' ? 'flex-row-reverse' : ''} max-w-3xl ${sender === 'user' ? 'ml-auto' : ''} animate-fade-in`;
+            
+            const iconName = sender === 'ai' ? 'cpu' : 'user';
+            const iconBg = sender === 'ai' ? 'bg-primary-600' : 'bg-slate-700';
+            const iconColor = sender === 'ai' ? 'text-white' : 'text-slate-300';
+
+            // Safe icon injection
+            let iconHtml = `<i data-feather="${iconName}"></i>`;
+            if (typeof feather !== 'undefined' && feather.icons[iconName]) {
+                iconHtml = feather.icons[iconName].toSvg({ class: `w-5 h-5 ${iconColor}` });
+            }
+
+            // Safe message text injection (XSS prevention)
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `${sender === 'ai' ? 'message-ai' : 'message-user'} p-4 rounded-2xl text-slate-200`;
+            messageDiv.textContent = text;
+
+            div.innerHTML = `
+                <div class="w-8 h-8 rounded-lg ${iconBg} flex items-center justify-center flex-shrink-0">
+                    ${iconHtml}
+                </div>
+            `;
+            div.appendChild(messageDiv);
+            
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        },
+
+        showTypingIndicator: (containerId) => {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const div = document.createElement('div');
+            div.id = 'typing-indicator';
+            div.className = 'flex gap-4 max-w-3xl animate-fade-in';
+
+            // Safe icon injection
+            let iconHtml = `<i data-feather="cpu"></i>`;
+            if (typeof feather !== 'undefined' && feather.icons['cpu']) {
+                iconHtml = feather.icons['cpu'].toSvg({ class: 'w-5 h-5 text-white' });
+            }
+
+            div.innerHTML = `
+                <div class="w-8 h-8 rounded-lg bg-primary-600 flex items-center justify-center flex-shrink-0">
+                    ${iconHtml}
+                </div>
+                <div class="message-ai p-4 rounded-2xl text-slate-200 flex items-center gap-1">
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                </div>
+            `;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        },
+
+        removeTypingIndicator: () => {
+            const el = document.getElementById('typing-indicator');
+            if (el) el.remove();
+        }
+    },
+
+    Forms: {
+        handleDemoRequest: (emailInputSelector, submitBtnSelector, modalSelector) => {
+            const emailInput = document.querySelector(emailInputSelector);
+            const btn = document.querySelector(submitBtnSelector);
+            const modal = document.querySelector(modalSelector);
+            
+            if (!emailInput || !btn) return;
+
+            const email = emailInput.value;
+            if (email && email.includes('@')) {
+                const originalText = btn.innerText;
+                btn.innerText = 'Request Sent!';
+                btn.classList.remove('bg-primary-600');
+                btn.classList.add('bg-secondary-600');
+                btn.disabled = true;
+                
+                Utils.log(`Demo request submitted for: ${email}`, 'success');
+
+                setTimeout(() => {
+                    if (modal) modal.classList.add('hidden');
+                    setTimeout(() => {
+                        btn.innerText = originalText;
+                        btn.classList.remove('bg-secondary-600');
+                        btn.classList.add('bg-primary-600');
+                        btn.disabled = false;
+                        emailInput.value = '';
+                    }, 500);
+                }, 1500);
+            } else {
+                alert('Please enter a valid work email.');
+                Utils.log('Invalid email for demo request', 'warning');
+            }
+        }
+    }
+};
+
 // Theme Management
 const ThemeManager = {
     init: () => {
-        // Check for saved theme preference or default to dark
-        if (!localStorage.getItem('theme')) {
-            localStorage.setItem('theme', 'dark');
-            document.documentElement.classList.add('dark');
-        } else {
-            const theme = localStorage.getItem('theme');
-            if (theme === 'dark') {
+        const savedTheme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (savedTheme) {
+            if (savedTheme === 'dark') {
                 document.documentElement.classList.add('dark');
             } else {
                 document.documentElement.classList.remove('dark');
             }
+        } else if (systemPrefersDark) {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            // Default to dark as per project aesthetic, but could be light
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
         }
     },
 
@@ -137,9 +269,11 @@ const ThemeManager = {
         if (html.classList.contains('dark')) {
             html.classList.remove('dark');
             localStorage.setItem('theme', 'light');
+            Utils.log('Theme switched to light');
         } else {
             html.classList.add('dark');
             localStorage.setItem('theme', 'dark');
+            Utils.log('Theme switched to dark');
         }
     }
 };
@@ -155,11 +289,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Add smooth scroll behavior
     document.documentElement.style.scrollBehavior = 'smooth';
+    
+    Utils.log('System initialized', 'success');
 });
 
 // Export for use in other scripts
 window.NexusAI = {
     Utils,
     API,
+    UI,
     ThemeManager
 };
