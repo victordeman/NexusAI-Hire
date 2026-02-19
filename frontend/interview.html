@@ -1,106 +1,179 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
-<!-- ... entire head and body up to the chat container unchanged ... -->
-
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview - NexusAI Hire</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { 50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc', 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81' },
+                        secondary: { 50: '#ecfdf5', 100: '#d1fae5', 200: '#a7f3d0', 300: '#6ee7b7', 400: '#34d399', 500: '#10b981', 600: '#059669', 700: '#047857', 800: '#065f46', 900: '#064e3b' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .glass-panel { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .message-bubble { max-width: 80%; border-radius: 16px; padding: 12px 16px; margin-bottom: 16px; animation: fade-in 0.3s ease-out; }
+        .message-ai { background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); align-self: flex-start; }
+        .message-user { background: #4f46e5; color: white; align-self: flex-end; }
+        @keyframes fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 antialiased">
     <script src="components/navbar.js"></script>
-    <script src="components/ModelSelector.js"></script>  <!-- make sure this is loaded -->
-    <script src="components/sidebar.js"></script>        <!-- if used elsewhere -->
-    <script src="script.js"></script>
+    <script src="components/sidebar.js"></script>
+    <script src="components/model-selector.js"></script>
+    <script src="components/footer.js"></script>
 
+    <div class="flex h-screen overflow-hidden">
+        <nexus-sidebar></nexus-sidebar>
+        
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <nexus-navbar></nexus-navbar>
+            
+            <main class="flex-1 overflow-hidden p-4 md:p-6 bg-slate-950">
+                <div class="max-w-5xl mx-auto h-full flex flex-col">
+                    <!-- Interview Header -->
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 glass-panel p-4 rounded-2xl">
+                        <div class="flex items-center gap-4">
+                            <div class="relative">
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-12 h-12 rounded-xl" alt="Candidate">
+                                <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-slate-900 rounded-full"></div>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold text-white">Sarah Chen</h2>
+                                <p class="text-sm text-slate-400">Senior Frontend Engineer Interview</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="flex flex-col items-end">
+                                <span class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Trust Score</span>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-24 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                                        <div id="trust-bar" class="h-full bg-secondary-500 transition-all duration-500" style="width: 94%"></div>
+                                    </div>
+                                    <span id="trust-score-num" class="text-lg font-bold text-secondary-400">94</span>
+                                </div>
+                            </div>
+                            <nexus-model-selector></nexus-model-selector>
+                        </div>
+                    </div>
+
+                    <!-- Chat Interface -->
+                    <div class="flex-1 glass-panel rounded-2xl flex flex-col overflow-hidden">
+                        <div id="chat-messages" class="flex-1 overflow-y-auto p-6 flex flex-col">
+                            <div class="message-bubble message-ai">
+                                Hello Sarah, I'm the NexusAI interviewer. Today we'll be discussing your experience with React and modern frontend architectures. Ready to begin?
+                            </div>
+                        </div>
+
+                        <!-- Typing Indicator -->
+                        <div id="typing-indicator" class="px-6 py-2 hidden">
+                            <div class="flex gap-1">
+                                <div class="w-2 h-2 bg-slate-600 rounded-full animate-bounce"></div>
+                                <div class="w-2 h-2 bg-slate-600 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                                <div class="w-2 h-2 bg-slate-600 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
+                            </div>
+                        </div>
+
+                        <!-- Input Area -->
+                        <div class="p-4 bg-slate-900/50 border-t border-white/5">
+                            <div class="relative flex items-center">
+                                <textarea id="message-input" rows="1" class="w-full bg-slate-800 border-none rounded-xl py-3 pl-4 pr-12 text-white placeholder-slate-500 focus:ring-2 focus:ring-primary-500 resize-none overflow-hidden" placeholder="Type your response..."></textarea>
+                                <button id="send-btn" class="absolute right-2 p-2 text-primary-400 hover:text-primary-300 transition-colors">
+                                    <i data-feather="send" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <nexus-footer class="mt-8"></nexus-footer>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
     <script>
         feather.replace();
 
-        // Model mapping for pretty badge
-        const modelLabels = {
-            "openai/gpt-4o-mini": "GPT-4o-mini",
-            "openai/gpt-4o": "GPT-4o",
-            "google/gemini-1.5-pro": "Gemini 1.5 Pro",
-            "ollama/llama3": "Llama 3 (local)",
-            "anthropic/claude-3.5-sonnet": "Claude 3.5 Sonnet"
-        };
+        const chatMessages = document.getElementById('chat-messages');
+        const messageInput = document.getElementById('message-input');
+        const sendBtn = document.getElementById('send-btn');
+        const typingIndicator = document.getElementById('typing-indicator');
+        const trustBar = document.getElementById('trust-bar');
+        const trustScoreNum = document.getElementById('trust-score-num');
 
-        // Update badge on load and when model changes
-        function updateModelBadge() {
-            const saved = localStorage.getItem('preferredModel');
-            const label = modelLabels[saved] || "GPT-4o-mini";
-            const badge = document.querySelector('.bg-primary-500\\/20.text-primary-300');
-            if (badge) badge.textContent = label;
+        function addMessage(text, sender) {
+            const bubble = document.createElement('div');
+            bubble.className = `message-bubble message-${sender}`;
+            bubble.textContent = text;
+            chatMessages.appendChild(bubble);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // Trust score elements
-        const trustNumberEl = document.querySelector('.top-4.right-4 .text-2xl');
-        const trustBarEl = document.querySelector('.top-4.right-4 .w-\\[94\\%\\]');
-
-        function updateTrustScore(score) {
-            if (trustNumberEl) trustNumberEl.textContent = score;
-            if (trustBarEl) trustBarEl.style.width = `${score}%`;
-        }
-
-        // Initial UI setup
-        updateModelBadge();
-        document.addEventListener('model-changed', updateModelBadge);
-
-        // Auto-resize textarea (unchanged)
-        const textarea = document.getElementById('message-input');
-        textarea.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 128) + 'px';
-        });
-
-        textarea.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
-        });
-
-        async function sendMessage() {
-            const input = document.getElementById('message-input');
-            const text = input.value.trim();
+        async function handleSend() {
+            const text = messageInput.value.trim();
             if (!text) return;
 
-            // Add user message
             addMessage(text, 'user');
-            input.value = '';
-            input.style.height = 'auto';
+            messageInput.value = '';
+            messageInput.style.height = 'auto';
 
-            // Show typing + send to backend
-            showTypingIndicator();
-
-            const currentModel = localStorage.getItem('preferredModel') || null;
+            typingIndicator.classList.remove('hidden');
+            
+            const model = localStorage.getItem('preferredModel') || 'openai/gpt-4o-mini';
 
             try {
-                const response = await fetch('http://localhost:8000/api/v1/ask', {
+                const response = await fetch('/api/v1/ask', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        question: text,
-                        model: currentModel
-                    })
+                    body: JSON.stringify({ question: text, model: model })
                 });
 
-                if (!response.ok) throw new Error('Network error');
-
-                const data = await response.json();
+                if (!response.ok) throw new Error('Backend not reachable');
                 
-                removeTypingIndicator();
-                addMessage(data.answer, 'ai');
-                updateTrustScore(data.trust_score);
-
+                const data = await response.json();
+                typingIndicator.classList.add('hidden');
+                
+                if (data.answer) {
+                    addMessage(data.answer, 'ai');
+                    if (data.trust_score) {
+                        trustBar.style.width = `${data.trust_score}%`;
+                        trustScoreNum.textContent = data.trust_score;
+                    }
+                }
             } catch (err) {
-                removeTypingIndicator();
-                addMessage('Sorry, I could not reach the server. Is the backend running?', 'ai');
+                typingIndicator.classList.add('hidden');
+                addMessage("I'm having trouble connecting to the NexusAI brain. Please ensure the backend is running.", 'ai');
                 console.error(err);
             }
         }
 
-        // addMessage, showTypingIndicator, removeTypingIndicator — unchanged from your original
-        // (copy-paste them here exactly as before)
-        function addMessage(text, sender) { /* your original function */ }
-        function showTypingIndicator() { /* your original function */ }
-        function removeTypingIndicator() { /* your original function */ }
+        sendBtn.addEventListener('click', handleSend);
+        messageInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSend();
+            }
+        });
 
-        // ... rest of your original helper functions (clearChat, endInterview, etc.) ...
+        // Auto-resize textarea
+        messageInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
     </script>
 </body>
 </html>
