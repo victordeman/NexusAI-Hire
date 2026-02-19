@@ -9,7 +9,26 @@ class NexusSidebar extends HTMLElement {
     connectedCallback() {
         this.render();
         this.setupEventListeners();
-        feather.replace(); // Initialize feather icons after render
+        this.initIcons();
+    }
+
+    initIcons() {
+        if (typeof feather !== 'undefined') {
+            const icons = this.shadowRoot.querySelectorAll('[data-feather]');
+            icons.forEach(icon => {
+                const name = icon.getAttribute('data-feather');
+                if (feather.icons[name]) {
+                    const svgString = feather.icons[name].toSvg({
+                        class: (icon.getAttribute('class') || '') + ' feather feather-' + name,
+                        width: 20,
+                        height: 20
+                    });
+                    icon.outerHTML = svgString;
+                }
+            });
+        } else {
+            setTimeout(() => this.initIcons(), 100);
+        }
     }
 
     render() {
@@ -80,7 +99,7 @@ class NexusSidebar extends HTMLElement {
                     color: #c7d2fe;
                     border-left: 3px solid #6366f1;
                 }
-                .nav-item i {
+                .nav-item i, .nav-item svg {
                     width: 20px;
                     height: 20px;
                     flex-shrink: 0;
@@ -104,6 +123,10 @@ class NexusSidebar extends HTMLElement {
                 .toggle-btn:hover {
                     background: rgba(99, 102, 241, 0.3);
                     color: white;
+                }
+                .toggle-btn svg {
+                    width: 20px;
+                    height: 20px;
                 }
                 .collapsed .logo-text,
                 .collapsed .nav-item span {
@@ -140,7 +163,7 @@ class NexusSidebar extends HTMLElement {
                 </div>
 
                 <nav class="nav">
-                    <div class="nav-item active" data-page="dashboard">
+                    <div class="nav-item" data-page="dashboard">
                         <i data-feather="layout"></i>
                         <span>Dashboard</span>
                     </div>
@@ -172,17 +195,22 @@ class NexusSidebar extends HTMLElement {
     setupEventListeners() {
         const sidebar = this.shadowRoot.querySelector('#sidebar');
         const toggleBtn = this.shadowRoot.querySelector('#toggle-sidebar');
-        const icon = toggleBtn.querySelector('i');
 
         toggleBtn.addEventListener('click', () => {
             this.isCollapsed = !this.isCollapsed;
             sidebar.classList.toggle('collapsed', this.isCollapsed);
             
-            // Rotate icon direction
-            icon.setAttribute('data-feather', this.isCollapsed ? 'chevrons-right' : 'chevrons-left');
-            feather.replace();
+            const iconName = this.isCollapsed ? 'chevrons-right' : 'chevrons-left';
+            if (typeof feather !== 'undefined' && feather.icons[iconName]) {
+                toggleBtn.innerHTML = feather.icons[iconName].toSvg({
+                    class: 'feather feather-' + iconName,
+                    width: 20,
+                    height: 20
+                });
+            } else {
+                toggleBtn.innerHTML = `<i data-feather="${iconName}"></i>`;
+            }
             
-            // Optional: dispatch event so main content can adjust margin
             this.dispatchEvent(new CustomEvent('sidebar-toggle', {
                 detail: { collapsed: this.isCollapsed },
                 bubbles: true,
@@ -190,7 +218,6 @@ class NexusSidebar extends HTMLElement {
             }));
         });
 
-        // Optional: highlight active item based on current page (basic version)
         const currentPath = window.location.pathname.split('/').pop() || 'index.html';
         const items = this.shadowRoot.querySelectorAll('.nav-item');
         items.forEach(item => {
