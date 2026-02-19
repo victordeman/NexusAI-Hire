@@ -30,7 +30,7 @@ NexusAI-Hire/
 │   └── architecture.md  # High-level system diagram (Mermaid graph)
 ├── frontend/
 │   ├── components/
-│   │   ├── ModelSelector.js  # Web component for LLM dropdown
+│   │   ├── model-selector.js  # Web component for LLM dropdown
 │   │   ├── navbar.js  # Web component for top nav
 │   │   └── sidebar.js  # Web component for side nav
 │   ├── dashboard.html  # Recruiter dashboard page
@@ -49,7 +49,7 @@ text
 - Shared assets: `style.css` (global styles, glass panels, animations), `script.js` (utils like time formatting, API simulation, theme management).
 - Web Components in `components/`:
   - `navbar.js`: Responsive top navigation with links, theme toggle, and avatar.
-  - `ModelSelector.js`: Dropdown for LLM selection; persists choice and dispatches events.
+  - `model-selector.js`: Dropdown for LLM selection; persists choice and dispatches events.
   - `sidebar.js`: Collapsible sidebar with nav items (dashboard, interviews, etc.); responsive for mobile.
 - Connection: `interview_connected.html` (or overwrite interview.html) now fetches real responses from backend via POST to `/api/v1/ask`, updates trust score dynamically, and reflects model choice in UI badge.
 
