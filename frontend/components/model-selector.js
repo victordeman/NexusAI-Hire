@@ -1,4 +1,4 @@
-// frontend/components/ModelSelector.js
+// frontend/components/model-selector.js
 class NexusModelSelector extends HTMLElement {
     constructor() {
         super();
