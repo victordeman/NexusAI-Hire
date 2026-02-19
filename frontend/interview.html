@@ -223,44 +223,6 @@
             }
         });
 
-        async function sendMessage() {
-            const input = document.getElementById('message-input');
-            const text = input.value.trim();
-            if (!text) return;
-
-            addMessage(text, 'user');
-            input.value = '';
-            input.style.height = 'auto';
-
-            showTypingIndicator();
-
-            const currentModel = localStorage.getItem('preferredModel') || "openai/gpt-4o-mini";
-
-            try {
-                const response = await fetch('/api/v1/ask', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        question: text,
-                        model: currentModel
-                    })
-                });
-
-                if (!response.ok) throw new Error('Network error');
-
-                const data = await response.json();
-                
-                removeTypingIndicator();
-                addMessage(data.answer, 'ai');
-                if (data.trust_score) updateTrustScore(data.trust_score);
-
-            } catch (err) {
-                removeTypingIndicator();
-                addMessage('Sorry, I could not reach the server. Is the backend running?', 'ai');
-                console.error(err);
-            }
-        }
-
         function addMessage(text, sender) {
             const chatMessages = document.getElementById('chat-messages');
             const div = document.createElement('div');
@@ -307,13 +269,6 @@
             if (el) el.remove();
         }
 
-        function clearChat() {
-            if (confirm('Are you sure you want to clear the chat history?')) {
-                const chatMessages = document.getElementById('chat-messages');
-                chatMessages.innerHTML = '';
-                addMessage("Chat cleared. How can I help you?", 'ai');
-            }
-        }
 
         function endInterview() {
             if (confirm('End interview and generate final report?')) {
@@ -325,6 +280,74 @@
         document.addEventListener('model-changed', (e) => {
             updateModelBadge();
         });
+
+        // Chat history to maintain context
+        let chatHistory = [
+            { role: "ai", content: "Hello Sarah, I'm the NexusAI interviewer. We'll be discussing your experience with React and modern frontend architectures today. Are you ready to begin?" }
+        ];
+
+        async function sendMessage() {
+            const input = document.getElementById('message-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            addMessage(text, 'user');
+            chatHistory.push({ role: "user", content: text });
+
+            input.value = '';
+            input.style.height = 'auto';
+
+            showTypingIndicator();
+
+            const currentModel = localStorage.getItem('preferredModel') || "openai/gpt-4o-mini";
+            const currentTrustScore = parseInt(document.getElementById('main-trust-score').getAttribute('score')) || 90;
+
+            try {
+                // Map frontend roles to backend roles
+                const formattedHistory = chatHistory.map(m => ({
+                    role: m.role === 'ai' ? 'assistant' : m.role,
+                    content: m.content
+                }));
+
+                // Use absolute URL for local development if needed
+                const apiUrl = window.location.port === '8080' ? 'http://localhost:8000/api/v1/ask' : '/api/v1/ask';
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        messages: formattedHistory,
+                        model: currentModel,
+                        current_trust_score: currentTrustScore
+                    })
+                });
+
+                if (!response.ok) throw new Error('Network error');
+
+                const data = await response.json();
+
+                removeTypingIndicator();
+                addMessage(data.answer, 'ai');
+                chatHistory.push({ role: "ai", content: data.answer });
+
+                if (data.trust_score) updateTrustScore(data.trust_score);
+
+            } catch (err) {
+                removeTypingIndicator();
+                addMessage('Sorry, I could not reach the server. Is the backend running?', 'ai');
+                console.error(err);
+            }
+        }
+
+        function clearChat() {
+            if (confirm('Are you sure you want to clear the chat history?')) {
+                const chatMessages = document.getElementById('chat-messages');
+                chatMessages.innerHTML = '';
+                chatHistory = [];
+                addMessage("Chat cleared. How can I help you?", 'ai');
+                chatHistory.push({ role: "ai", content: "Chat cleared. How can I help you?" });
+            }
+        }
 
         // Initial setup
         updateModelBadge();
