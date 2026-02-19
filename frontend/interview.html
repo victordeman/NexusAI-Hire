@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interview - NexusAI Hire</title>
+    <title>AI Interview - NexusAI Hire</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
@@ -14,8 +14,30 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: { 50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc', 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81' },
-                        secondary: { 50: '#ecfdf5', 100: '#d1fae5', 200: '#a7f3d0', 300: '#6ee7b7', 400: '#34d399', 500: '#10b981', 600: '#059669', 700: '#047857', 800: '#065f46', 900: '#064e3b' }
+                        primary: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            200: '#c7d2fe',
+                            300: '#a5b4fc',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81',
+                        },
+                        secondary: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            200: '#a7f3d0',
+                            300: '#6ee7b7',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        }
                     }
                 }
             }
@@ -24,18 +46,53 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Inter', sans-serif; }
-        .glass-panel { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .message-bubble { max-width: 80%; border-radius: 16px; padding: 12px 16px; margin-bottom: 16px; animation: fade-in 0.3s ease-out; }
-        .message-ai { background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); align-self: flex-start; }
-        .message-user { background: #4f46e5; color: white; align-self: flex-end; }
-        @keyframes fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .chat-container {
+            height: calc(100vh - 180px);
+        }
+        
+        .message-ai {
+            background: rgba(30, 41, 59, 0.7);
+            border-bottom-left-radius: 4px;
+        }
+        
+        .message-user {
+            background: rgba(99, 102, 241, 0.2);
+            border-bottom-right-radius: 4px;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Typing Indicator Animation */
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #94a3b8;
+            border-radius: 50%;
+            display: inline-block;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+            40% { transform: scale(1); opacity: 1; }
+        }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 antialiased">
+<body class="bg-slate-950 text-slate-100 antialiased overflow-hidden">
     <script src="components/navbar.js"></script>
     <script src="components/sidebar.js"></script>
     <script src="components/model-selector.js"></script>
-    <script src="components/footer.js"></script>
+    <script src="components/trust-score.js"></script>
+    <script src="script.js"></script>
 
     <div class="flex h-screen overflow-hidden">
         <nexus-sidebar></nexus-sidebar>
@@ -43,137 +100,234 @@
         <div class="flex-1 flex flex-col overflow-hidden">
             <nexus-navbar></nexus-navbar>
             
-            <main class="flex-1 overflow-hidden p-4 md:p-6 bg-slate-950">
-                <div class="max-w-5xl mx-auto h-full flex flex-col">
-                    <!-- Interview Header -->
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 glass-panel p-4 rounded-2xl">
-                        <div class="flex items-center gap-4">
-                            <div class="relative">
-                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-12 h-12 rounded-xl" alt="Candidate">
-                                <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-slate-900 rounded-full"></div>
-                            </div>
-                            <div>
-                                <h2 class="text-xl font-bold text-white">Sarah Chen</h2>
-                                <p class="text-sm text-slate-400">Senior Frontend Engineer Interview</p>
+            <main class="flex-1 flex flex-col p-4 md:p-6 bg-slate-950 overflow-hidden">
+                <!-- Interview Header -->
+                <div class="glass-panel rounded-2xl p-4 mb-6 flex flex-wrap items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <div class="relative">
+                            <img src="https://static.photos/people/48x48/1" alt="Candidate" class="w-12 h-12 rounded-xl object-cover border-2 border-primary-500/20">
+                            <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-slate-900 rounded-full"></div>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-white leading-none mb-1">Sarah Chen</h2>
+                            <p class="text-sm text-slate-400">Senior Frontend Engineer Candidate</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-6">
+                        <div class="flex items-center gap-2 px-3 py-1.5 bg-red-500/10 border border-red-500/20 text-red-400 rounded-lg text-sm font-semibold animate-pulse">
+                            <i data-feather="radio" class="w-4 h-4"></i>
+                            <span>LIVE</span>
+                        </div>
+                        <div class="h-8 w-px bg-slate-800"></div>
+                        <div class="flex flex-col items-end">
+                            <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-1">Active Model</span>
+                            <div class="flex items-center gap-2">
+                                <span class="bg-primary-500/20 text-primary-300 px-2 py-0.5 rounded text-xs font-medium" id="model-badge">GPT-4o-mini</span>
+                                <nexus-model-selector></nexus-model-selector>
                             </div>
                         </div>
-                        <div class="flex items-center gap-4">
-                            <div class="flex flex-col items-end">
-                                <span class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Trust Score</span>
-                                <div class="flex items-center gap-2">
-                                    <div class="w-24 h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                                        <div id="trust-bar" class="h-full bg-secondary-500 transition-all duration-500" style="width: 94%"></div>
-                                    </div>
-                                    <span id="trust-score-num" class="text-lg font-bold text-secondary-400">94</span>
-                                </div>
+                        <div class="h-8 w-px bg-slate-800"></div>
+                        <div class="flex flex-col items-center">
+                            <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-1">Trust Score</span>
+                            <nexus-trust-score id="main-trust-score" score="94"></nexus-trust-score>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Area -->
+                <div class="flex-1 flex flex-col glass-panel rounded-2xl overflow-hidden relative">
+                    <!-- Messages -->
+                    <div id="chat-messages" class="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth">
+                        <!-- AI Greeting -->
+                        <div class="flex gap-4 max-w-3xl animate-fade-in">
+                            <div class="w-8 h-8 rounded-lg bg-primary-600 flex items-center justify-center flex-shrink-0">
+                                <i data-feather="cpu" class="w-5 h-5 text-white"></i>
                             </div>
-                            <nexus-model-selector></nexus-model-selector>
+                            <div class="message-ai p-4 rounded-2xl text-slate-200">
+                                Hello Sarah, I'm the NexusAI interviewer. We'll be discussing your experience with React and modern frontend architectures today. Are you ready to begin?
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Chat Interface -->
-                    <div class="flex-1 glass-panel rounded-2xl flex flex-col overflow-hidden">
-                        <div id="chat-messages" class="flex-1 overflow-y-auto p-6 flex flex-col">
-                            <div class="message-bubble message-ai">
-                                Hello Sarah, I'm the NexusAI interviewer. Today we'll be discussing your experience with React and modern frontend architectures. Ready to begin?
-                            </div>
-                        </div>
-
-                        <!-- Typing Indicator -->
-                        <div id="typing-indicator" class="px-6 py-2 hidden">
-                            <div class="flex gap-1">
-                                <div class="w-2 h-2 bg-slate-600 rounded-full animate-bounce"></div>
-                                <div class="w-2 h-2 bg-slate-600 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
-                                <div class="w-2 h-2 bg-slate-600 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
-                            </div>
-                        </div>
-
-                        <!-- Input Area -->
-                        <div class="p-4 bg-slate-900/50 border-t border-white/5">
-                            <div class="relative flex items-center">
-                                <textarea id="message-input" rows="1" class="w-full bg-slate-800 border-none rounded-xl py-3 pl-4 pr-12 text-white placeholder-slate-500 focus:ring-2 focus:ring-primary-500 resize-none overflow-hidden" placeholder="Type your response..."></textarea>
-                                <button id="send-btn" class="absolute right-2 p-2 text-primary-400 hover:text-primary-300 transition-colors">
-                                    <i data-feather="send" class="w-5 h-5"></i>
+                    <!-- Input Area -->
+                    <div class="p-4 bg-slate-900/50 border-t border-slate-800">
+                        <div class="max-w-4xl mx-auto relative">
+                            <textarea 
+                                id="message-input"
+                                rows="1"
+                                placeholder="Type your response here..."
+                                class="w-full bg-slate-800 border border-slate-700 rounded-xl py-4 pl-4 pr-32 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-primary-500 transition-all resize-none overflow-hidden"
+                            ></textarea>
+                            <div class="absolute right-2 bottom-2 flex items-center gap-2">
+                                <button class="p-2 text-slate-400 hover:text-white transition-colors" title="Toggle Mic">
+                                    <i data-feather="mic" class="w-5 h-5"></i>
+                                </button>
+                                <button 
+                                    onclick="sendMessage()"
+                                    class="bg-primary-600 hover:bg-primary-500 text-white px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 shadow-lg shadow-primary-600/20"
+                                >
+                                    <span>Send</span>
+                                    <i data-feather="send" class="w-4 h-4"></i>
                                 </button>
                             </div>
                         </div>
+                        <div class="max-w-4xl mx-auto mt-2 flex justify-between items-center px-2">
+                            <p class="text-[10px] text-slate-500">Press Enter to send, Shift + Enter for new line</p>
+                            <div class="flex gap-4">
+                                <button onclick="clearChat()" class="text-[10px] text-slate-500 hover:text-red-400 transition-colors uppercase tracking-widest font-bold">Clear Chat</button>
+                                <button onclick="endInterview()" class="text-[10px] text-slate-500 hover:text-white transition-colors uppercase tracking-widest font-bold">End Interview</button>
+                            </div>
+                        </div>
                     </div>
-                    <nexus-footer class="mt-8"></nexus-footer>
                 </div>
             </main>
         </div>
     </div>
 
-    <script src="script.js"></script>
     <script>
         feather.replace();
 
-        const chatMessages = document.getElementById('chat-messages');
-        const messageInput = document.getElementById('message-input');
-        const sendBtn = document.getElementById('send-btn');
-        const typingIndicator = document.getElementById('typing-indicator');
-        const trustBar = document.getElementById('trust-bar');
-        const trustScoreNum = document.getElementById('trust-score-num');
+        // Model labels
+        const modelLabels = {
+            "openai/gpt-4o-mini": "GPT-4o-mini",
+            "openai/gpt-4o": "GPT-4o",
+            "google/gemini-1.5-pro": "Gemini 1.5 Pro",
+            "ollama/llama3": "Llama 3 (local)",
+            "anthropic/claude-3.5-sonnet": "Claude 3.5 Sonnet"
+        };
 
-        function addMessage(text, sender) {
-            const bubble = document.createElement('div');
-            bubble.className = `message-bubble message-${sender}`;
-            bubble.textContent = text;
-            chatMessages.appendChild(bubble);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+        function updateModelBadge() {
+            const saved = localStorage.getItem('preferredModel');
+            const label = modelLabels[saved] || "GPT-4o-mini";
+            const badge = document.getElementById('model-badge');
+            if (badge) badge.textContent = label;
         }
 
-        async function handleSend() {
-            const text = messageInput.value.trim();
+        function updateTrustScore(score) {
+            const trustEl = document.getElementById('main-trust-score');
+            if (trustEl) trustEl.setAttribute('score', score);
+        }
+
+        // Auto-resize textarea
+        const textarea = document.getElementById('message-input');
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 128) + 'px';
+        });
+
+        textarea.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        async function sendMessage() {
+            const input = document.getElementById('message-input');
+            const text = input.value.trim();
             if (!text) return;
 
             addMessage(text, 'user');
-            messageInput.value = '';
-            messageInput.style.height = 'auto';
+            input.value = '';
+            input.style.height = 'auto';
 
-            typingIndicator.classList.remove('hidden');
-            
-            const model = localStorage.getItem('preferredModel') || 'openai/gpt-4o-mini';
+            showTypingIndicator();
+
+            const currentModel = localStorage.getItem('preferredModel') || "openai/gpt-4o-mini";
 
             try {
                 const response = await fetch('/api/v1/ask', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ question: text, model: model })
+                    body: JSON.stringify({
+                        question: text,
+                        model: currentModel
+                    })
                 });
 
-                if (!response.ok) throw new Error('Backend not reachable');
-                
+                if (!response.ok) throw new Error('Network error');
+
                 const data = await response.json();
-                typingIndicator.classList.add('hidden');
                 
-                if (data.answer) {
-                    addMessage(data.answer, 'ai');
-                    if (data.trust_score) {
-                        trustBar.style.width = `${data.trust_score}%`;
-                        trustScoreNum.textContent = data.trust_score;
-                    }
-                }
+                removeTypingIndicator();
+                addMessage(data.answer, 'ai');
+                if (data.trust_score) updateTrustScore(data.trust_score);
+
             } catch (err) {
-                typingIndicator.classList.add('hidden');
-                addMessage("I'm having trouble connecting to the NexusAI brain. Please ensure the backend is running.", 'ai');
+                removeTypingIndicator();
+                addMessage('Sorry, I could not reach the server. Is the backend running?', 'ai');
                 console.error(err);
             }
         }
 
-        sendBtn.addEventListener('click', handleSend);
-        messageInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                handleSend();
+        function addMessage(text, sender) {
+            const chatMessages = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = `flex gap-4 ${sender === 'user' ? 'flex-row-reverse' : ''} max-w-3xl ${sender === 'user' ? 'ml-auto' : ''} animate-fade-in`;
+            
+            const iconHtml = sender === 'ai' 
+                ? `<div class="w-8 h-8 rounded-lg bg-primary-600 flex items-center justify-center flex-shrink-0"><i data-feather="cpu" class="w-5 h-5 text-white"></i></div>`
+                : `<div class="w-8 h-8 rounded-lg bg-slate-700 flex items-center justify-center flex-shrink-0"><i data-feather="user" class="w-5 h-5 text-slate-300"></i></div>`;
+
+            div.innerHTML = `
+                ${iconHtml}
+                <div class="${sender === 'ai' ? 'message-ai' : 'message-user'} p-4 rounded-2xl text-slate-200">
+                    ${text}
+                </div>
+            `;
+            
+            chatMessages.appendChild(div);
+            feather.replace();
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const chatMessages = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.id = 'typing-indicator';
+            div.className = 'flex gap-4 max-w-3xl animate-fade-in';
+            div.innerHTML = `
+                <div class="w-8 h-8 rounded-lg bg-primary-600 flex items-center justify-center flex-shrink-0">
+                    <i data-feather="cpu" class="w-5 h-5 text-white"></i>
+                </div>
+                <div class="message-ai p-4 rounded-2xl text-slate-200 flex items-center gap-1">
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                </div>
+            `;
+            chatMessages.appendChild(div);
+            feather.replace();
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const el = document.getElementById('typing-indicator');
+            if (el) el.remove();
+        }
+
+        function clearChat() {
+            if (confirm('Are you sure you want to clear the chat history?')) {
+                const chatMessages = document.getElementById('chat-messages');
+                chatMessages.innerHTML = '';
+                addMessage("Chat cleared. How can I help you?", 'ai');
             }
+        }
+
+        function endInterview() {
+            if (confirm('End interview and generate final report?')) {
+                window.location.href = 'dashboard.html';
+            }
+        }
+
+        // Listen for model changes
+        document.addEventListener('model-changed', (e) => {
+            updateModelBadge();
         });
 
-        // Auto-resize textarea
-        messageInput.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = (this.scrollHeight) + 'px';
-        });
+        // Initial setup
+        updateModelBadge();
     </script>
 </body>
 </html>
