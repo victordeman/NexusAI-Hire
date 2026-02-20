@@ -38,7 +38,7 @@ async def ask_question(request: AskRequest):
             messages.insert(0, {"role": "system", "content": system_prompt})
 
         # 3. Get LLM response
-        answer = get_llm_response(messages, request.model)
+        answer = await get_llm_response(messages, request.model)
 
         # 4. Update trust score (simulated logic)
         # Small random fluctuation, but stays within 70-100 range
