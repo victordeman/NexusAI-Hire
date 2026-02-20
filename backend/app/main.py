@@ -1,7 +1,17 @@
 # backend/app/main.py
-from fastapi import FastAPI
+import logging
+import time
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from app.api.v1.interview import router as interview_router
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+)
+logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title="NexusAI Hire API",
@@ -18,9 +28,38 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logger.error(f"Unhandled exception: {str(exc)}", exc_info=True)
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "An unexpected error occurred. Please try again later."},
+    )
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    start_time = time.perf_counter()
+    response = await call_next(request)
+    process_time = (time.perf_counter() - start_time) * 1000
+    formatted_process_time = "{0:.2f}".format(process_time)
+    logger.info(
+        f"{request.method} {request.url.path} "
+        f"completed_in={formatted_process_time}ms status_code={response.status_code}"
+    )
+    return response
+
 # Mount the interview router at /api/v1
 app.include_router(interview_router, prefix="/api/v1")
 
+@app.get("/health")
+async def health_check():
+    return {"status": "ok"}
+
 @app.get("/")
 async def root():
-    return {"message": "NexusAI Hire backend running"}
+    return {
+        "title": app.title,
+        "version": app.version,
+        "description": app.description,
+        "docs_url": "/docs"
+    }
