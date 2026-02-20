@@ -1,13 +1,13 @@
 import pytest
 from fastapi.testclient import TestClient
-from unittest.mock import patch
+from unittest.mock import patch, AsyncMock
 from app.main import app
 
 client = TestClient(app)
 
 @pytest.fixture
 def mock_llm_response():
-    with patch("app.api.v1.interview.get_llm_response") as mock:
+    with patch("app.api.v1.interview.get_llm_response", new_callable=AsyncMock) as mock:
         mock.return_value = "Mocked LLM answer"
         yield mock
 
