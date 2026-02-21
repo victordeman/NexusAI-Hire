@@ -176,8 +176,8 @@
                         </div>
                     </div>
 
-                    <!-- Recent Assessments -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Recent Assessments & Quick Actions -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         <div class="glass-panel rounded-2xl p-6">
                             <h3 class="text-lg font-semibold text-white mb-4">Recent Completions</h3>
                             <div class="space-y-3">
@@ -227,6 +227,71 @@
                                 <p class="text-xs text-slate-400">Switching to Gemini for initial screenings saved $1,240 this month.</p>
                             </div>
                         </div>
+
+                        <div class="glass-panel rounded-2xl p-6">
+                            <h3 class="text-lg font-semibold text-white mb-6">Quick Actions</h3>
+                            <div class="space-y-4">
+                                <a href="interview.html" class="flex items-center gap-4 p-4 bg-primary-600/10 hover:bg-primary-600/20 border border-primary-600/20 rounded-xl transition-all group">
+                                    <div class="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center text-white shadow-lg shadow-primary-600/20 group-hover:scale-110 transition-transform">
+                                        <i data-feather="plus"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-white">New Interview</div>
+                                        <div class="text-xs text-slate-400">Invite a new candidate</div>
+                                    </div>
+                                </a>
+                                <button class="w-full flex items-center gap-4 p-4 bg-slate-800/50 hover:bg-slate-800 border border-slate-700 rounded-xl transition-all group text-left">
+                                    <div class="w-10 h-10 bg-slate-700 rounded-lg flex items-center justify-center text-slate-300 group-hover:bg-slate-600 group-hover:text-white transition-colors">
+                                        <i data-feather="users"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-white">Candidates</div>
+                                        <div class="text-xs text-slate-400">Manage talent pool</div>
+                                    </div>
+                                </button>
+                                <button class="w-full flex items-center gap-4 p-4 bg-slate-800/50 hover:bg-slate-800 border border-slate-700 rounded-xl transition-all group text-left">
+                                    <div class="w-10 h-10 bg-slate-700 rounded-lg flex items-center justify-center text-slate-300 group-hover:bg-slate-600 group-hover:text-white transition-colors">
+                                        <i data-feather="settings"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-white">Settings</div>
+                                        <div class="text-xs text-slate-400">Configure platform</div>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Status -->
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="glass-panel rounded-xl p-4 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-2 h-2 rounded-full bg-secondary-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
+                                <span class="text-sm font-medium text-slate-200">GPT-4o</span>
+                            </div>
+                            <span class="text-[10px] uppercase tracking-wider text-secondary-400 font-bold">Online</span>
+                        </div>
+                        <div class="glass-panel rounded-xl p-4 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-2 h-2 rounded-full bg-secondary-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
+                                <span class="text-sm font-medium text-slate-200">Gemini 1.5 Pro</span>
+                            </div>
+                            <span class="text-[10px] uppercase tracking-wider text-secondary-400 font-bold">Online</span>
+                        </div>
+                        <div class="glass-panel rounded-xl p-4 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-2 h-2 rounded-full bg-secondary-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
+                                <span class="text-sm font-medium text-slate-200">Llama 3</span>
+                            </div>
+                            <span class="text-[10px] uppercase tracking-wider text-secondary-400 font-bold">Online</span>
+                        </div>
+                        <div class="glass-panel rounded-xl p-4 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-2 h-2 rounded-full bg-secondary-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
+                                <span class="text-sm font-medium text-slate-200">Claude 3.5</span>
+                            </div>
+                            <span class="text-[10px] uppercase tracking-wider text-secondary-400 font-bold">Online</span>
+                        </div>
                     </div>
 
                     <!-- Live Activity Feed -->
@@ -235,7 +300,7 @@
                             <i data-feather="activity" class="w-5 h-5 text-primary-400"></i>
                             Live Activity Feed
                         </h3>
-                        <div id="activity-feed" class="space-y-4">
+                        <div id="activity-feed" class="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
                             <!-- Activities will be injected here -->
                             <div class="flex gap-4 p-3 rounded-lg bg-slate-800/30 border border-slate-700/50 animate-fade-in">
                                 <div class="w-2 h-2 mt-2 rounded-full bg-secondary-500"></div>
@@ -253,95 +318,6 @@
     </div>
 
     <script src="script.js"></script>
-    <script>
-        // Model Performance Chart
-        const ctx = document.getElementById('modelPerformanceChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['GPT-4o', 'Gemini 1.5 Pro', 'Llama 3', 'Claude 3.5'],
-                datasets: [{
-                    data: [45, 25, 15, 15],
-                    backgroundColor: [
-                        '#6366f1', // primary-500
-                        '#10b981', // secondary-500
-                        '#f59e0b', // orange-500
-                        '#8b5cf6'  // purple-500
-                    ],
-                    borderWidth: 0,
-                    hoverOffset: 10
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'right',
-                        labels: {
-                            color: '#94a3b8',
-                            usePointStyle: true,
-                            padding: 20,
-                            font: { size: 12 }
-                        }
-                    }
-                },
-                cutout: '70%'
-            }
-        });
-
-        // Dynamic Activity Feed Simulation
-        const activities = [
-            { user: 'Sarah Chen', action: 'started interview', time: 'Just now', type: 'start' },
-            { user: 'System', action: 'generated trust report for David Park', time: '2m ago', type: 'info' },
-            { user: 'Marcus Johnson', action: 'completed technical round', time: '5m ago', type: 'success' },
-            { user: 'GPT-4o', action: 'switched to high-precision mode', time: '12m ago', type: 'system' }
-        ];
-
-        function addActivity(activity) {
-            const feed = document.getElementById('activity-feed');
-            const item = document.createElement('div');
-            item.className = 'flex gap-4 p-3 rounded-lg bg-slate-800/30 border border-slate-700/50 animate-fade-in';
-            
-            const colorClass = activity.type === 'start' ? 'bg-primary-500' : 
-                             activity.type === 'success' ? 'bg-secondary-500' :
-                             activity.type === 'system' ? 'bg-purple-500' : 'bg-slate-500';
-
-            item.innerHTML = `
-                <div class="w-2 h-2 mt-2 rounded-full ${colorClass}"></div>
-                <div>
-                    <p class="text-sm text-slate-200">${activity.user} <span class="text-slate-400">${activity.action}</span></p>
-                    <p class="text-xs text-slate-500 mt-1">${activity.time}</p>
-                </div>
-            `;
-            feed.prepend(item);
-            if (feed.children.length > 5) feed.lastElementChild.remove();
-        }
-
-        // Simulate new activities every 15-30 seconds
-        setInterval(() => {
-            const users = ['Lisa Wang', 'James Miller', 'System', 'Claude 3.5'];
-            const actions = ['started interview', 'submitted feedback', 'updated model preference', 'completed assessment'];
-            const randomUser = users[Math.floor(Math.random() * users.length)];
-            const randomAction = actions[Math.floor(Math.random() * actions.length)];
-            
-            addActivity({
-                user: randomUser,
-                action: randomAction,
-                time: 'Just now',
-                type: Math.random() > 0.5 ? 'start' : 'info'
-            });
-        }, 20000);
-
-        // Update stats randomly to feel "live"
-        setInterval(() => {
-            const activeCandidates = document.querySelector('.text-2xl.font-bold.text-white');
-            if (activeCandidates) {
-                const current = parseInt(activeCandidates.textContent);
-                const change = Math.random() > 0.5 ? 1 : -1;
-                activeCandidates.textContent = current + change;
-            }
-        }, 10000);
-    </script>
+    <script src="dashboard.js"></script>
 </body>
 </html>
