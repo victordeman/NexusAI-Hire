@@ -6,6 +6,16 @@
     <meta name="description" content="NexusAI Hire - The next-gen AI-powered technical interview platform. Automate screenings with adaptive AI, real-time proctoring, and deep talent insights.">
     <meta name="keywords" content="AI interviews, technical screening, recruitment automation, LLM, proctoring, hiring platform">
     <title>NexusAI Hire | AI-Powered Technical Interview Platform</title>
+
+    <!-- SEO & Social Media Meta Tags -->
+    <meta property="og:title" content="NexusAI Hire | AI-Powered Technical Interview Platform">
+    <meta property="og:description" content="NexusAI automates your technical funnel with adaptive LLM-driven interviews. Scale your engineering team with confidence.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://nexusai-hire.com">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NexusAI Hire | AI-Powered Technical Interview Platform">
+    <meta name="twitter:description" content="Scale your engineering team with confidence using adaptive AI-driven interviews.">
+
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/feather-icons"></script>
@@ -62,24 +72,6 @@
             }
         }
     </script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .glass-panel {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .hero-gradient {
-            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e293b 100%);
-        }
-        .text-gradient {
-            background: linear-gradient(to right, #818cf8, #34d399);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-    </style>
 </head>
 <body class="bg-slate-950 text-slate-100 antialiased">
     <nexus-navbar></nexus-navbar>
@@ -106,11 +98,11 @@
                 </p>
                 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                    <a href="dashboard.html" class="group relative px-8 py-4 bg-primary-600 hover:bg-primary-500 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-primary-600/25 hover:shadow-primary-600/40 flex items-center gap-2">
+                    <a href="dashboard.html" class="btn-primary group relative px-8 py-4 text-white font-semibold rounded-xl flex items-center gap-2" aria-label="Start Recruiting - Go to Dashboard">
                         <span>Start Recruiting</span>
                         <i data-feather="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
                     </a>
-                    <a href="interview.html" class="px-8 py-4 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-xl transition-all duration-300 border border-slate-700 flex items-center gap-2">
+                    <a href="interview.html" class="btn-secondary px-8 py-4 text-slate-200 font-semibold rounded-xl flex items-center gap-2" aria-label="Try Demo Interview">
                         <i data-feather="play-circle" class="w-5 h-5"></i>
                         <span>Demo Interview</span>
                     </a>
@@ -149,7 +141,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Feature 1 -->
-                <div class="glass-panel rounded-2xl p-8 hover:bg-slate-800/50 transition-all duration-300 group">
+                <div class="glass-panel glass-panel-hover rounded-2xl p-8 group">
                     <div class="w-12 h-12 bg-primary-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                         <i data-feather="cpu" class="w-6 h-6 text-primary-400"></i>
                     </div>
@@ -160,7 +152,7 @@
                 </div>
 
                 <!-- Feature 2 -->
-                <div class="glass-panel rounded-2xl p-8 hover:bg-slate-800/50 transition-all duration-300 group">
+                <div class="glass-panel glass-panel-hover rounded-2xl p-8 group">
                     <div class="w-12 h-12 bg-secondary-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                         <i data-feather="shield" class="w-6 h-6 text-secondary-400"></i>
                     </div>
@@ -171,7 +163,7 @@
                 </div>
 
                 <!-- Feature 3 -->
-                <div class="glass-panel rounded-2xl p-8 hover:bg-slate-800/50 transition-all duration-300 group">
+                <div class="glass-panel glass-panel-hover rounded-2xl p-8 group">
                     <div class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                         <i data-feather="mic" class="w-6 h-6 text-purple-400"></i>
                     </div>
@@ -182,7 +174,7 @@
                 </div>
 
                 <!-- Feature 4 -->
-                <div class="glass-panel rounded-2xl p-8 hover:bg-slate-800/50 transition-all duration-300 group">
+                <div class="glass-panel glass-panel-hover rounded-2xl p-8 group">
                     <div class="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                         <i data-feather="bar-chart-2" class="w-6 h-6 text-orange-400"></i>
                     </div>
@@ -193,7 +185,7 @@
                 </div>
 
                 <!-- Feature 5 -->
-                <div class="glass-panel rounded-2xl p-8 hover:bg-slate-800/50 transition-all duration-300 group">
+                <div class="glass-panel glass-panel-hover rounded-2xl p-8 group">
                     <div class="w-12 h-12 bg-pink-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                         <i data-feather="code" class="w-6 h-6 text-pink-400"></i>
                     </div>
@@ -204,7 +196,7 @@
                 </div>
 
                 <!-- Feature 6 -->
-                <div class="glass-panel rounded-2xl p-8 hover:bg-slate-800/50 transition-all duration-300 group">
+                <div class="glass-panel glass-panel-hover rounded-2xl p-8 group">
                     <div class="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                         <i data-feather="git-branch" class="w-6 h-6 text-cyan-400"></i>
                     </div>
@@ -218,15 +210,23 @@
     </section>
 
     <!-- Trusted By Section -->
-    <section class="py-20 bg-slate-900/50 border-y border-slate-800">
+    <section class="py-20 bg-slate-900/50 border-y border-slate-800 overflow-hidden">
         <div class="container mx-auto px-6">
             <p class="text-center text-slate-500 text-sm font-semibold uppercase tracking-widest mb-12">Trusted by Industry Leaders</p>
-            <div class="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
-                <div class="text-2xl font-bold text-slate-300">TECHCORP</div>
-                <div class="text-2xl font-bold text-slate-300">NOVANET</div>
-                <div class="text-2xl font-bold text-slate-300">QUANTUM</div>
-                <div class="text-2xl font-bold text-slate-300">STELLAR</div>
-                <div class="text-2xl font-bold text-slate-300">APEX</div>
+            <div class="relative">
+                <div class="flex animate-marquee whitespace-nowrap gap-12 md:gap-24 opacity-50 grayscale hover:grayscale-0 transition-all duration-500 items-center">
+                    <div class="text-2xl font-bold text-slate-300">TECHCORP</div>
+                    <div class="text-2xl font-bold text-slate-300">NOVANET</div>
+                    <div class="text-2xl font-bold text-slate-300">QUANTUM</div>
+                    <div class="text-2xl font-bold text-slate-300">STELLAR</div>
+                    <div class="text-2xl font-bold text-slate-300">APEX</div>
+                    <!-- Duplicate for seamless loop -->
+                    <div class="text-2xl font-bold text-slate-300">TECHCORP</div>
+                    <div class="text-2xl font-bold text-slate-300">NOVANET</div>
+                    <div class="text-2xl font-bold text-slate-300">QUANTUM</div>
+                    <div class="text-2xl font-bold text-slate-300">STELLAR</div>
+                    <div class="text-2xl font-bold text-slate-300">APEX</div>
+                </div>
             </div>
         </div>
     </section>
@@ -284,7 +284,7 @@
                 </div>
 
                 <!-- Pro -->
-                <div class="glass-panel rounded-3xl p-8 border-primary-500/50 relative">
+                <div class="glass-panel rounded-3xl p-8 border-primary-500 relative scale-105 z-10 shadow-2xl shadow-primary-500/10">
                     <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary-600 text-white text-xs font-bold rounded-full">MOST POPULAR</div>
                     <h3 class="text-lg font-semibold text-white mb-2">Pro</h3>
                     <div class="flex items-baseline gap-1 mb-6">
@@ -318,6 +318,75 @@
         </div>
     </section>
 
+    <!-- Testimonials Section -->
+    <section class="py-24 bg-slate-900/30">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">What Recruiting Leaders Say</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Hear from the engineering and talent leaders transforming their hiring with NexusAI.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Testimonial 1 -->
+                <div class="glass-panel p-8 rounded-2xl flex flex-col h-full">
+                    <div class="flex gap-1 text-secondary-400 mb-4">
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-slate-300 italic mb-8 flex-grow">"NexusAI has completely transformed our technical hiring. We've cut our screening time by 75% while increasing the quality of our on-site candidates."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-primary-600/20 flex items-center justify-center text-primary-400 font-bold">SC</div>
+                        <div>
+                            <div class="font-semibold text-white">Sarah Chen</div>
+                            <div class="text-xs text-slate-500">VP Engineering, TechFlow</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="glass-panel p-8 rounded-2xl flex flex-col h-full">
+                    <div class="flex gap-1 text-secondary-400 mb-4">
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-slate-300 italic mb-8 flex-grow">"The adaptive LLM interviews provide a signal we just couldn't get from standard coding tests. It's like having our best engineers conduct every first-round interview."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-secondary-600/20 flex items-center justify-center text-secondary-400 font-bold">MR</div>
+                        <div>
+                            <div class="font-semibold text-white">Marcus Rodriguez</div>
+                            <div class="text-xs text-slate-500">Head of Talent, QuantCo</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="glass-panel p-8 rounded-2xl flex flex-col h-full">
+                    <div class="flex gap-1 text-secondary-400 mb-4">
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                        <i data-feather="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-slate-300 italic mb-8 flex-grow">"The AI proctoring and trust scores give us the confidence to hire remotely without second-guessing candidate authenticity. It's a game changer."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-purple-600/20 flex items-center justify-center text-purple-400 font-bold">ER</div>
+                        <div>
+                            <div class="font-semibold text-white">Elena Rossi</div>
+                            <div class="text-xs text-slate-500">CTO, Innovate Analytics</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- CTA Section -->
     <section class="py-24 relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-r from-primary-900/50 to-secondary-900/50"></div>
@@ -328,10 +397,10 @@
                     Join leading tech companies using NexusAI to reduce time-to-hire by 80% while improving candidate quality.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="dashboard.html" class="px-8 py-4 bg-white text-slate-900 font-bold rounded-xl hover:bg-slate-100 transition-colors shadow-xl">
+                    <a href="dashboard.html" class="px-8 py-4 bg-white text-slate-900 font-bold rounded-xl hover:bg-slate-100 transition-colors shadow-xl" aria-label="Get Started Free">
                         Get Started Free
                     </a>
-                    <button onclick="document.getElementById('demo-modal').classList.remove('hidden')" class="px-8 py-4 bg-transparent border-2 border-slate-400 text-slate-300 font-semibold rounded-xl hover:border-white hover:text-white transition-colors">
+                    <button onclick="document.getElementById('demo-modal').classList.remove('hidden')" class="px-8 py-4 bg-transparent border-2 border-slate-400 text-slate-300 font-semibold rounded-xl hover:border-white hover:text-white transition-colors" aria-label="Schedule a Demo">
                         Schedule Demo
                     </button>
                 </div>
@@ -340,12 +409,12 @@
     </section>
 
     <!-- Demo Modal -->
-    <div id="demo-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
+    <div id="demo-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm" role="dialog" aria-labelledby="modal-title" aria-modal="true">
         <div class="bg-slate-900 border border-slate-700 rounded-2xl p-8 max-w-md w-full mx-4 relative">
-            <button onclick="document.getElementById('demo-modal').classList.add('hidden')" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+            <button onclick="document.getElementById('demo-modal').classList.add('hidden')" class="absolute top-4 right-4 text-slate-400 hover:text-white" aria-label="Close modal">
                 <i data-feather="x" class="w-6 h-6"></i>
             </button>
-            <h3 class="text-2xl font-bold mb-4">Request Demo</h3>
+            <h3 id="modal-title" class="text-2xl font-bold mb-4">Request Demo</h3>
             <p class="text-slate-400 mb-6">Enter your email and we'll schedule a personalized walkthrough.</p>
             <input type="email" placeholder="you@company.com" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-primary-500 mb-4">
             <button id="demo-submit-btn" onclick="handleDemoRequest()" class="w-full py-3 bg-primary-600 hover:bg-primary-500 text-white font-semibold rounded-xl transition-colors">
