@@ -85,13 +85,21 @@ const Utils = {
 // API Integration
 const API = {
     // Real API call to get LLM response
-    ask: async (question, model) => {
+    ask: async (question, model, interviewId = null) => {
         try {
             Utils.log(`Sending question to ${model || 'default model'}...`);
+            
+            const headers = { 'Content-Type': 'application/json' };
+            const token = NexusAI.Auth.getToken();
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+
             const response = await fetch('/api/v1/ask', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: headers,
                 body: JSON.stringify({
+                    interview_id: interviewId,
                     question: question,
                     model: model
                 })
@@ -104,6 +112,37 @@ const API = {
             const data = await response.json();
             Utils.log('Received response from API', 'success');
             return data;
+        } catch (error) {
+            Utils.log(`API Error: ${error.message}`, 'error');
+            throw error;
+        }
+    },
+
+    // Fetch interviews from backend
+    listInterviews: async () => {
+        try {
+            const headers = {};
+            const token = NexusAI.Auth.getToken();
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+
+            const response = await fetch('/api/v1/interviews', { headers });
+            if (!response.ok) throw new Error('Failed to fetch interviews');
+            return await response.json();
+        } catch (error) {
+            Utils.log(`API Error: ${error.message}`, 'error');
+            return [];
+        }
+    },
+
+    getInterview: async (id) => {
+        try {
+            const headers = {};
+            const token = NexusAI.Auth.getToken();
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+
+            const response = await fetch(`/api/v1/interviews/${id}`, { headers });
+            if (!response.ok) throw new Error('Failed to fetch interview');
+            return await response.json();
         } catch (error) {
             Utils.log(`API Error: ${error.message}`, 'error');
             throw error;
