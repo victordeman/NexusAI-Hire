@@ -276,6 +276,112 @@
 
         // Initial setup
         updateModelBadge();
+
+        // Proctoring Logic
+        async function startInterviewWithProctoring() {
+            try {
+                // 1. Request Webcam Access
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const video = document.getElementById('proctor-video');
+                video.srcObject = stream;
+
+                // 2. Hide Modal
+                document.getElementById('proctor-consent-modal').classList.add('hidden');
+
+                // 3. Initialize Proctoring
+                initProctoring();
+
+                NexusAI.Utils.log('Proctoring initialized with camera access', 'success');
+            } catch (err) {
+                alert('Camera access is required for proctoring. Please enable it to continue.');
+                NexusAI.Utils.log('Camera access denied: ' + err.message, 'error');
+            }
+        }
+
+        function initProctoring() {
+            // Tab Switching Detection
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    NexusAI.Utils.log('Tab switch detected!', 'warning');
+                    reportEvent('tab_switch');
+                }
+            });
+
+            // Periodic Snapshotting
+            setInterval(() => {
+                captureAndAnalyze();
+            }, 10000); // Every 10 seconds
+        }
+
+        async function reportEvent(type, snapshot = null) {
+            if (!currentInterviewId) {
+                // If interview hasn't started yet, we can't report to a specific ID
+                return;
+            }
+
+            const data = await NexusAI.API.reportProctorEvent(currentInterviewId, type, snapshot);
+            if (data && data.new_trust_score !== undefined) {
+                updateTrustScore(data.new_trust_score);
+            }
+        }
+
+        function captureAndAnalyze() {
+            const video = document.getElementById('proctor-video');
+            const canvas = document.getElementById('proctor-canvas');
+            const context = canvas.getContext('2d');
+
+            if (video.srcObject && video.readyState >= 2) { // HAVE_CURRENT_DATA
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const snapshot = canvas.toDataURL('image/jpeg', 0.5);
+
+                // Mock AI Logic: 5% chance of detecting multiple faces
+                if (Math.random() < 0.05) {
+                    NexusAI.Utils.log('Mock AI: Multiple faces detected!', 'error');
+                    reportEvent('multiple_faces', snapshot);
+                } else {
+                    NexusAI.Utils.log('Periodic proctoring check: OK');
+                }
+            }
+        }
     </script>
+
+    <!-- Proctoring Consent Modal -->
+    <div id="proctor-consent-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md" role="dialog" aria-modal="true">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl p-8 max-w-lg w-full mx-4 shadow-2xl">
+            <div class="w-16 h-16 bg-primary-500/10 rounded-2xl flex items-center justify-center mb-6 border border-primary-500/20">
+                <i data-feather="shield" class="w-8 h-8 text-primary-400"></i>
+            </div>
+            <h3 class="text-2xl font-bold mb-4 text-white">Integrity & Proctoring Consent</h3>
+            <p class="text-slate-300 mb-6 leading-relaxed">
+                To ensure a fair and reliable interview process, NexusAI Hire uses real-time browser-based proctoring. By continuing, you agree to:
+            </p>
+            <ul class="space-y-4 mb-8 text-slate-400 text-sm">
+                <li class="flex gap-3">
+                    <i data-feather="monitor" class="w-5 h-5 text-primary-400 flex-shrink-0"></i>
+                    <span><strong>Tab Detection:</strong> We monitor if you switch tabs or minimize the browser window.</span>
+                </li>
+                <li class="flex gap-3">
+                    <i data-feather="video" class="w-5 h-5 text-primary-400 flex-shrink-0"></i>
+                    <span><strong>Webcam Monitoring:</strong> Your camera will be used to detect presence and ensure identity integrity. Periodic snapshots are analyzed.</span>
+                </li>
+                <li class="flex gap-3">
+                    <i data-feather="bar-chart" class="w-5 h-5 text-primary-400 flex-shrink-0"></i>
+                    <span><strong>Trust Score:</strong> Your actions dynamically influence your interview trust score.</span>
+                </li>
+            </ul>
+            <div class="flex flex-col gap-3">
+                <button id="start-proctoring-btn" onclick="startInterviewWithProctoring()" class="w-full py-4 bg-primary-600 hover:bg-primary-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-primary-600/20">
+                    Agree & Start Interview
+                </button>
+                <button onclick="window.location.href='dashboard.html'" class="w-full py-2 text-slate-500 hover:text-slate-300 transition-colors text-sm font-medium">
+                    Cancel and Return to Dashboard
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden elements for proctoring -->
+    <video id="proctor-video" class="hidden" autoplay playsinline></video>
+    <canvas id="proctor-canvas" class="hidden" width="320" height="240"></canvas>
 </body>
 </html>
