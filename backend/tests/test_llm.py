@@ -2,7 +2,7 @@ import pytest
 import asyncio
 from unittest.mock import patch, AsyncMock
 from app.models.llm import get_llm_response, get_llm_streaming_response
-from app.config import LITELLM_MODEL
+from app.config import settings
 from litellm.exceptions import OpenAIError
 
 @patch("app.models.llm.acompletion")
@@ -20,7 +20,7 @@ def test_get_llm_response_success(mock_acompletion):
     mock_acompletion.assert_called_once()
     args, kwargs = mock_acompletion.call_args
     assert kwargs["messages"] == messages
-    assert kwargs["model"] == LITELLM_MODEL # default
+    assert kwargs["model"] == settings.LITELLM_MODEL # default
 
 @patch("app.models.llm.acompletion")
 def test_get_llm_response_with_model(mock_acompletion):
