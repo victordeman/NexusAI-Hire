@@ -6,9 +6,12 @@ class NexusNavbar extends HTMLElement {
 
     connectedCallback() {
         this.render();
+        document.addEventListener('auth-state-changed', () => this.render());
     }
 
     render() {
+        const isAuthenticated = window.NexusAI && window.NexusAI.Auth && window.NexusAI.Auth.isAuthenticated();
+
         this.shadowRoot.innerHTML = `
             <style>
                 :host {
@@ -130,9 +133,16 @@ class NexusNavbar extends HTMLElement {
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                     </button>
                     
-                    <div class="profile">
-                        <img src="https://static.photos/people/32x32/5" alt="Profile" class="avatar">
-                    </div>
+                    ${isAuthenticated ? `
+                        <div class="profile" style="cursor: pointer;" onclick="NexusAI.Auth.signOut()">
+                            <img src="https://static.photos/people/32x32/5" alt="Profile" class="avatar">
+                            <span style="color: #94a3b8; font-size: 0.75rem; margin-left: 8px;">Logout</span>
+                        </div>
+                    ` : `
+                        <button class="nav-link" style="background: rgba(99, 102, 241, 0.1); color: white;" onclick="document.getElementById('auth-modal').classList.remove('hidden')">
+                            Login
+                        </button>
+                    `}
                 </div>
             </div>
         `;
