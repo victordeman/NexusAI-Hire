@@ -1,11 +1,13 @@
 # backend/app/api/v1/interview_connected.py  (or overwrite original)
-from fastapi import APIRouter, Body, HTTPException
+from fastapi import APIRouter, Body, HTTPException, Depends
 from typing import Optional, List
 from pydantic import BaseModel
 import random  # for mock trust score until real proctoring
 import logging
 
 from app.models.llm import get_llm_response
+from app.api.deps import get_current_user
+from app.core.supabase import supabase
 
 router = APIRouter()  # No prefix here — we mount with /api/v1 in main.py
 
@@ -14,13 +16,39 @@ class Message(BaseModel):
     content: str
 
 class AskRequest(BaseModel):
+    interview_id: Optional[str] = None
     question: Optional[str] = None
     messages: Optional[List[Message]] = None
     model: Optional[str] = None
     current_trust_score: Optional[int] = 90
 
+@router.get("/interviews")
+async def list_interviews(current_user: object = Depends(get_current_user)):
+    try:
+        result = supabase.table("interviews").select("*").eq("user_id", current_user.id).order("updated_at", desc=True).execute()
+        return result.data
+    except Exception as e:
+        logging.error(f"Error listing interviews: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to fetch interviews")
+
+@router.get("/interviews/{interview_id}")
+async def get_interview(interview_id: str, current_user: object = Depends(get_current_user)):
+    try:
+        result = supabase.table("interviews").select("*").eq("id", interview_id).eq("user_id", current_user.id).single().execute()
+        if not result.data:
+            raise HTTPException(status_code=404, detail="Interview not found")
+        return result.data
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        logging.error(f"Error getting interview: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to fetch interview")
+
 @router.post("/ask")
-async def ask_question(request: AskRequest):
+async def ask_question(
+    request: AskRequest,
+    current_user: object = Depends(get_current_user)
+):
     try:
         # 1. Prepare messages
         messages = []
@@ -39,6 +67,9 @@ async def ask_question(request: AskRequest):
 
         # 3. Get LLM response
         answer = await get_llm_response(messages, request.model)
+        
+        # Add AI response to history for persistence
+        messages.append({"role": "assistant", "content": answer})
 
         # 4. Update trust score (simulated logic)
         # Small random fluctuation, but stays within 70-100 range
@@ -46,7 +77,29 @@ async def ask_question(request: AskRequest):
         fluctuation = random.randint(-2, 1)
         trust_score = max(70, min(100, base_score + fluctuation))
 
+        # 5. Persist to Supabase
+        interview_data = {
+            "user_id": current_user.id,
+            "history": messages,
+            "trust_score": trust_score,
+            "model_used": request.model or "default",
+            "status": "active"
+        }
+
+        if request.interview_id:
+            # Update existing interview
+            result = supabase.table("interviews").update(interview_data).eq("id", request.interview_id).eq("user_id", current_user.id).execute()
+            interview_id = request.interview_id
+        else:
+            # Create new interview
+            result = supabase.table("interviews").insert(interview_data).execute()
+            if result.data:
+                interview_id = result.data[0]["id"]
+            else:
+                interview_id = None
+
         return {
+            "interview_id": interview_id,
             "answer": answer,
             "trust_score": trust_score
         }
