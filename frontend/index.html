@@ -19,6 +19,8 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth.js"></script>
     <script src="components/navbar.js"></script>
     <script src="components/footer.js"></script>
     <script>
@@ -423,10 +425,92 @@
         </div>
     </div>
 
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm" role="dialog" aria-modal="true">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl p-8 max-w-md w-full mx-4 relative">
+            <button onclick="document.getElementById('auth-modal').classList.add('hidden')" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <i data-feather="x" class="w-6 h-6"></i>
+            </button>
+            
+            <div id="login-form">
+                <h3 class="text-2xl font-bold mb-4">Welcome Back</h3>
+                <p class="text-slate-400 mb-6">Sign in to manage your interviews.</p>
+                <div class="space-y-4">
+                    <input type="email" id="login-email" placeholder="Email address" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-primary-500">
+                    <input type="password" id="login-password" placeholder="Password" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-primary-500">
+                    <button id="login-btn" onclick="handleLogin()" class="w-full py-3 bg-primary-600 hover:bg-primary-500 text-white font-semibold rounded-xl transition-colors">Sign In</button>
+                </div>
+                <p class="mt-6 text-center text-sm text-slate-400">
+                    Don't have an account? <a href="#" onclick="toggleAuthForm()" class="text-primary-400 hover:underline">Sign up</a>
+                </p>
+            </div>
+
+            <div id="signup-form" class="hidden">
+                <h3 class="text-2xl font-bold mb-4">Create Account</h3>
+                <p class="text-slate-400 mb-6">Start your AI-powered hiring journey.</p>
+                <div class="space-y-4">
+                    <input type="email" id="signup-email" placeholder="Email address" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-primary-500">
+                    <input type="password" id="signup-password" placeholder="Password" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-primary-500">
+                    <button id="signup-btn" onclick="handleSignUp()" class="w-full py-3 bg-primary-600 hover:bg-primary-500 text-white font-semibold rounded-xl transition-colors">Create Account</button>
+                </div>
+                <p class="mt-6 text-center text-sm text-slate-400">
+                    Already have an account? <a href="#" onclick="toggleAuthForm()" class="text-primary-400 hover:underline">Sign in</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
     <nexus-footer></nexus-footer>
 
     <script src="script.js"></script>
     <script>
+        function toggleAuthForm() {
+            document.getElementById('login-form').classList.toggle('hidden');
+            document.getElementById('signup-form').classList.toggle('hidden');
+        }
+
+        async function handleLogin() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const btn = document.getElementById('login-btn');
+            
+            btn.disabled = true;
+            btn.innerText = 'Signing in...';
+            
+            const { data, error } = await NexusAI.Auth.signIn(email, password);
+            
+            if (error) {
+                alert(error.message);
+                btn.disabled = false;
+                btn.innerText = 'Sign In';
+            } else {
+                document.getElementById('auth-modal').classList.add('hidden');
+                window.location.href = 'dashboard.html';
+            }
+        }
+
+        async function handleSignUp() {
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const btn = document.getElementById('signup-btn');
+            
+            btn.disabled = true;
+            btn.innerText = 'Creating account...';
+            
+            const { data, error } = await NexusAI.Auth.signUp(email, password);
+            
+            if (error) {
+                alert(error.message);
+                btn.disabled = false;
+                btn.innerText = 'Create Account';
+            } else {
+                alert('Success! Please check your email for verification.');
+                toggleAuthForm();
+                btn.disabled = false;
+                btn.innerText = 'Create Account';
+            }
+        }
+
         // Modal Form Handling
         function handleDemoRequest() {
             NexusAI.UI.Forms.handleDemoRequest(
