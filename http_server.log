@@ -1,0 +1,12 @@
+127.0.0.1 - - [22/Feb/2026 15:20:16] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [22/Feb/2026 15:20:16] "GET /style.css HTTP/1.1" 200 -
+127.0.0.1 - - [22/Feb/2026 15:20:16] "GET /auth.js HTTP/1.1" 200 -
+127.0.0.1 - - [22/Feb/2026 15:20:16] "GET /components/navbar.js HTTP/1.1" 200 -
+127.0.0.1 - - [22/Feb/2026 15:20:16] "GET /components/footer.js HTTP/1.1" 200 -
+127.0.0.1 - - [22/Feb/2026 15:20:16] "GET /script.js HTTP/1.1" 200 -
+127.0.0.1 - - [22/Feb/2026 15:23:34] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [22/Feb/2026 15:23:34] "GET /style.css HTTP/1.1" 200 -
+127.0.0.1 - - [22/Feb/2026 15:23:34] "GET /auth.js HTTP/1.1" 200 -
+127.0.0.1 - - [22/Feb/2026 15:23:34] "GET /components/navbar.js HTTP/1.1" 200 -
+127.0.0.1 - - [22/Feb/2026 15:23:34] "GET /script.js HTTP/1.1" 200 -
+127.0.0.1 - - [22/Feb/2026 15:23:34] "GET /components/footer.js HTTP/1.1" 200 -
