@@ -1,7 +1,7 @@
 import logging
 from litellm import acompletion
 from litellm.exceptions import OpenAIError
-from app.config import LITELLM_MODEL, LITELLM_API_KEY, LITELLM_BASE_URL
+from app.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +15,7 @@ async def get_llm_response(
     """
     Get a non-streaming response from the LLM using LiteLLM.
     """
-    selected_model = model or LITELLM_MODEL
+    selected_model = model or settings.LITELLM_MODEL
     
     try:
         logger.info(f"Requesting LLM response from model: {selected_model}")
@@ -30,10 +30,10 @@ async def get_llm_response(
         }
         
         # Only add api_key and api_base if they are provided/needed
-        if LITELLM_API_KEY:
-            completion_params["api_key"] = LITELLM_API_KEY
-        if LITELLM_BASE_URL:
-            completion_params["api_base"] = LITELLM_BASE_URL
+        if settings.LITELLM_API_KEY:
+            completion_params["api_key"] = settings.LITELLM_API_KEY
+        if settings.LITELLM_BASE_URL:
+            completion_params["api_base"] = settings.LITELLM_BASE_URL
             
         response = await acompletion(**completion_params)
         
@@ -57,7 +57,7 @@ async def get_llm_streaming_response(
     """
     Get a streaming response from the LLM using LiteLLM.
     """
-    selected_model = model or LITELLM_MODEL
+    selected_model = model or settings.LITELLM_MODEL
     
     try:
         logger.info(f"Requesting streaming LLM response from model: {selected_model}")
@@ -72,10 +72,10 @@ async def get_llm_streaming_response(
             **kwargs
         }
         
-        if LITELLM_API_KEY:
-            completion_params["api_key"] = LITELLM_API_KEY
-        if LITELLM_BASE_URL:
-            completion_params["api_base"] = LITELLM_BASE_URL
+        if settings.LITELLM_API_KEY:
+            completion_params["api_key"] = settings.LITELLM_API_KEY
+        if settings.LITELLM_BASE_URL:
+            completion_params["api_base"] = settings.LITELLM_BASE_URL
             
         response = await acompletion(**completion_params)
         return response
