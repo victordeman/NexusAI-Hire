@@ -55,3 +55,34 @@ def test_ask_question_error_handling():
         )
         assert response.status_code == 500
         assert "Failed to get response from AI" in response.json()["detail"]
+
+def test_ask_question_with_session(mock_llm_response):
+    # First call: No session_id, starts a new session
+    response = client.post(
+        "/api/v1/ask",
+        json={"question": "Hello, I am Jules."}
+    )
+    assert response.status_code == 200
+    data = response.json()
+    session_id = data.get("session_id")
+    assert session_id is not None
+
+    # Second call: Use session_id, history should persist
+    response = client.post(
+        "/api/v1/ask",
+        json={"question": "What is my name?", "session_id": session_id}
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert data["session_id"] == session_id
+
+    # Verify that the LLM was called with the full history
+    # The history should contain:
+    # [system, user: Hello, assistant: Mocked LLM answer, user: What is my name?]
+    args, kwargs = mock_llm_response.call_args
+    messages = args[0]
+    assert len(messages) == 4
+    assert messages[0]["role"] == "system"
+    assert messages[1] == {"role": "user", "content": "Hello, I am Jules."}
+    assert messages[2] == {"role": "assistant", "content": "Mocked LLM answer"}
+    assert messages[3] == {"role": "user", "content": "What is my name?"}
