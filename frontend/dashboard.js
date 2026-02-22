@@ -4,7 +4,36 @@ document.addEventListener('DOMContentLoaded', () => {
     initModelPerformanceChart();
     initActivityFeed();
     initLiveStats();
+    loadRealInterviews();
 });
+
+async function loadRealInterviews() {
+    if (window.NexusAI && window.NexusAI.Auth && window.NexusAI.Auth.isAuthenticated()) {
+        try {
+            const interviews = await window.NexusAI.API.listInterviews();
+            updateDashboardStats(interviews);
+        } catch (error) {
+            console.error('Failed to load real interviews', error);
+        }
+    }
+}
+
+function updateDashboardStats(interviews) {
+    if (!interviews || interviews.length === 0) return;
+
+    // Update Completed Interviews count
+    const completedEl = document.querySelectorAll('.text-2xl.font-bold.text-white')[1];
+    if (completedEl) {
+        completedEl.textContent = interviews.length;
+    }
+
+    // Update Average Trust Score
+    const trustAvgEl = document.querySelectorAll('.text-2xl.font-bold.text-white')[3];
+    if (trustAvgEl) {
+        const avg = interviews.reduce((sum, int) => sum + (int.trust_score || 0), 0) / interviews.length;
+        trustAvgEl.textContent = avg.toFixed(1);
+    }
+}
 
 function initModelPerformanceChart() {
     const canvas = document.getElementById('modelPerformanceChart');
