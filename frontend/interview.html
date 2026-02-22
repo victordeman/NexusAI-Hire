@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -220,6 +222,8 @@
             }
         });
 
+        let currentInterviewId = null;
+
         async function sendMessage() {
             const input = document.getElementById('message-input');
             const text = input.value.trim();
@@ -234,7 +238,11 @@
             const currentModel = localStorage.getItem('preferredModel') || "openai/gpt-4o-mini";
 
             try {
-                const data = await NexusAI.API.ask(text, currentModel);
+                const data = await NexusAI.API.ask(text, currentModel, currentInterviewId);
+                
+                if (data.interview_id) {
+                    currentInterviewId = data.interview_id;
+                }
                 
                 NexusAI.UI.Chat.removeTypingIndicator();
                 NexusAI.UI.Chat.renderMessage('chat-messages', data.answer, 'ai');
