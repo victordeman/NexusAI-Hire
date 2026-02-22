@@ -225,19 +225,26 @@
             const text = input.value.trim();
             if (!text) return;
 
+            // 1. Render and save user message
             NexusAI.UI.Chat.renderMessage('chat-messages', text, 'user');
+            NexusAI.UI.Chat.history.add('user', text);
+
             input.value = '';
             input.style.height = 'auto';
 
             NexusAI.UI.Chat.showTypingIndicator('chat-messages');
 
             const currentModel = localStorage.getItem('preferredModel') || "openai/gpt-4o-mini";
+            const history = NexusAI.UI.Chat.history.get();
 
             try {
-                const data = await NexusAI.API.ask(text, currentModel);
+                // 2. Send full history to API
+                const data = await NexusAI.API.ask(history, currentModel);
                 
                 NexusAI.UI.Chat.removeTypingIndicator();
-                NexusAI.UI.Chat.renderMessage('chat-messages', data.answer, 'ai');
+                NexusAI.UI.Chat.renderMessage('chat-messages', data.answer, 'assistant');
+                NexusAI.UI.Chat.history.add('assistant', data.answer);
+
                 if (data.trust_score) updateTrustScore(data.trust_score);
 
             } catch (err) {
@@ -249,9 +256,21 @@
 
         function clearChat() {
             if (confirm('Are you sure you want to clear the chat history?')) {
+                NexusAI.UI.Chat.history.clear();
                 const chatMessages = document.getElementById('chat-messages');
                 chatMessages.innerHTML = '';
                 NexusAI.UI.Chat.renderMessage('chat-messages', "Chat cleared. How can I help you?", 'ai');
+            }
+        }
+
+        function loadHistory() {
+            const history = NexusAI.UI.Chat.history.get();
+            if (history.length > 0) {
+                const container = document.getElementById('chat-messages');
+                container.innerHTML = '';
+                history.forEach(msg => {
+                    NexusAI.UI.Chat.renderMessage('chat-messages', msg.content, msg.role);
+                });
             }
         }
 
@@ -268,6 +287,7 @@
 
         // Initial setup
         updateModelBadge();
+        loadHistory();
     </script>
 </body>
 </html>

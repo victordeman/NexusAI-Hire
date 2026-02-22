@@ -85,16 +85,21 @@ const Utils = {
 // API Integration
 const API = {
     // Real API call to get LLM response
-    ask: async (question, model) => {
+    ask: async (messages, model) => {
         try {
-            Utils.log(`Sending question to ${model || 'default model'}...`);
+            Utils.log(`Sending request to ${model || 'default model'}...`);
+
+            const payload = { model: model };
+            if (Array.isArray(messages)) {
+                payload.messages = messages;
+            } else {
+                payload.question = messages;
+            }
+
             const response = await fetch('/api/v1/ask', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    question: question,
-                    model: model
-                })
+                body: JSON.stringify(payload)
             });
 
             if (!response.ok) {
@@ -139,16 +144,35 @@ const API = {
 // UI Components & Utilities
 const UI = {
     Chat: {
+        history: {
+            get: () => {
+                const h = localStorage.getItem('nexus_chat_history');
+                return h ? JSON.parse(h) : [];
+            },
+            save: (history) => {
+                localStorage.setItem('nexus_chat_history', JSON.stringify(history));
+            },
+            add: (role, content) => {
+                const h = UI.Chat.history.get();
+                h.push({ role, content });
+                UI.Chat.history.save(h);
+            },
+            clear: () => {
+                localStorage.removeItem('nexus_chat_history');
+            }
+        },
+
         renderMessage: (containerId, text, sender) => {
             const container = document.getElementById(containerId);
             if (!container) return;
 
+            const isAI = sender === 'ai' || sender === 'assistant' || sender === 'system';
             const div = document.createElement('div');
-            div.className = `flex gap-4 ${sender === 'user' ? 'flex-row-reverse' : ''} max-w-3xl ${sender === 'user' ? 'ml-auto' : ''} animate-fade-in`;
+            div.className = `flex gap-4 ${!isAI ? 'flex-row-reverse' : ''} max-w-3xl ${!isAI ? 'ml-auto' : ''} animate-fade-in`;
             
-            const iconName = sender === 'ai' ? 'cpu' : 'user';
-            const iconBg = sender === 'ai' ? 'bg-primary-600' : 'bg-slate-700';
-            const iconColor = sender === 'ai' ? 'text-white' : 'text-slate-300';
+            const iconName = isAI ? 'cpu' : 'user';
+            const iconBg = isAI ? 'bg-primary-600' : 'bg-slate-700';
+            const iconColor = isAI ? 'text-white' : 'text-slate-300';
 
             // Safe icon injection
             let iconHtml = `<i data-feather="${iconName}"></i>`;
@@ -158,7 +182,7 @@ const UI = {
 
             // Safe message text injection (XSS prevention)
             const messageDiv = document.createElement('div');
-            messageDiv.className = `${sender === 'ai' ? 'message-ai' : 'message-user'} p-4 rounded-2xl text-slate-200`;
+            messageDiv.className = `${isAI ? 'message-ai' : 'message-user'} p-4 rounded-2xl text-slate-200`;
             messageDiv.textContent = text;
 
             div.innerHTML = `
