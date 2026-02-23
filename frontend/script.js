@@ -149,6 +149,36 @@ const API = {
         }
     },
 
+    // Real API call to report proctoring event
+    reportProctorEvent: async (interviewId, eventType, snapshot = null) => {
+        try {
+            if (!interviewId) return null;
+            
+            const headers = { 'Content-Type': 'application/json' };
+            const token = NexusAI.Auth.getToken();
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+
+            const response = await fetch('/api/v1/proctor/report', {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({
+                    interview_id: interviewId,
+                    event_type: eventType,
+                    snapshot: snapshot
+                })
+            });
+
+            if (!response.ok) throw new Error(`Server responded with ${response.status}`);
+            
+            const data = await response.json();
+            Utils.log(`Proctor event reported: ${eventType}`, 'warning');
+            return data;
+        } catch (error) {
+            Utils.log(`Proctor API Error: ${error.message}`, 'error');
+            return null;
+        }
+    },
+
     // Simulate interview session creation
     createInterview: async (candidateData) => {
         await new Promise(resolve => setTimeout(resolve, 800));
