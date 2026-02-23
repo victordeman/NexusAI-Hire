@@ -22,6 +22,11 @@ class AskRequest(BaseModel):
     model: Optional[str] = None
     current_trust_score: Optional[int] = 90
 
+class ProctorReportRequest(BaseModel):
+    interview_id: str
+    event_type: str
+    snapshot: Optional[str] = None
+
 @router.get("/interviews")
 async def list_interviews(current_user: object = Depends(get_current_user)):
     try:
@@ -108,3 +113,41 @@ async def ask_question(
     except Exception as e:
         logging.error(f"Error in ask_question: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Failed to get response from AI: {str(e)}")
+
+@router.post("/proctor/report")
+async def report_proctor_event(
+    request: ProctorReportRequest,
+    current_user: object = Depends(get_current_user)
+):
+    try:
+        # 1. Fetch current interview to get the trust score
+        result = supabase.table("interviews").select("trust_score").eq("id", request.interview_id).eq("user_id", current_user.id).single().execute()
+        if not result.data:
+            raise HTTPException(status_code=404, detail="Interview not found")
+        
+        current_score = result.data.get("trust_score", 90)
+        
+        # 2. Apply penalties
+        penalty = 0
+        if request.event_type == "tab_switch":
+            penalty = 5
+        elif request.event_type == "multiple_faces":
+            penalty = 10
+        elif request.event_type == "no_face":
+            penalty = 2
+            
+        new_score = max(0, current_score - penalty)
+        
+        # 3. Update in Supabase
+        supabase.table("interviews").update({"trust_score": new_score}).eq("id", request.interview_id).eq("user_id", current_user.id).execute()
+        
+        return {
+            "status": "success",
+            "new_trust_score": new_score,
+            "event_processed": request.event_type
+        }
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        logging.error(f"Error in report_proctor_event: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to process proctoring event: {str(e)}")
