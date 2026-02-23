@@ -1,4 +1,5 @@
 // NexusAI Hire - Supabase Auth Integration
+import { createClient } from '@supabase/supabase-js';
 
 (function() {
     // These should be configured via environment variables in a production build
@@ -9,9 +10,8 @@
     };
 
     // Initialize Supabase Client
-    // We use window.supabase which is provided by the CDN script
-    if (window.supabase && typeof window.supabase.createClient === 'function' && config.url && config.key) {
-        window.supabaseClient = window.supabase.createClient(config.url, config.key);
+    if (config.url && config.key) {
+        window.supabaseClient = createClient(config.url, config.key);
     }
 
     const Auth = {

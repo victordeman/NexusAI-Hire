@@ -3,13 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - NexusAI Hire</title>
+    <title>Recruiter Dashboard - NexusAI Hire</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/feather-icons"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="auth.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="auth.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -45,24 +42,14 @@
             }
         }
     </script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .glass-panel {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-    </style>
 </head>
-<body class="bg-slate-950 text-slate-100 antialiased">
-    <script src="components/navbar.js"></script>
-    <script src="components/sidebar.js"></script>
-    <script src="components/model-selector.js"></script>
-    <script src="components/interview-card.js"></script>
-    <script src="components/trust-score.js"></script>
-    <script src="components/footer.js"></script>
+<body class="bg-slate-950 text-slate-100 antialiased overflow-hidden">
+    <script type="module" src="components/navbar.js"></script>
+    <script type="module" src="components/sidebar.js"></script>
+    <script type="module" src="components/model-selector.js"></script>
+    <script type="module" src="components/interview-card.js"></script>
+    <script type="module" src="components/trust-score.js"></script>
+    <script type="module" src="components/footer.js"></script>
 
     <div class="flex h-screen overflow-hidden">
         <nexus-sidebar></nexus-sidebar>
@@ -70,256 +57,177 @@
         <div class="flex-1 flex flex-col overflow-hidden">
             <nexus-navbar></nexus-navbar>
             
-            <!-- Main Content -->
-            <main class="flex-1 overflow-y-auto bg-slate-950 p-6">
-                <div class="max-w-7xl mx-auto">
-                    <!-- Header -->
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-                        <div>
-                            <h1 class="text-3xl font-bold text-white mb-1">Recruiter Dashboard</h1>
-                            <p class="text-slate-400">Manage active interviews and review candidate assessments</p>
+            <main class="flex-1 overflow-y-auto p-4 md:p-8 bg-slate-950 custom-scrollbar">
+                <!-- Dashboard Header -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                    <div>
+                        <h1 class="text-3xl font-bold text-white tracking-tight">Recruiter Dashboard</h1>
+                        <p class="text-slate-400 mt-1">Monitor live interviews and analyze candidate performance.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button class="btn-secondary px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-semibold">
+                            <i data-feather="download" class="w-4 h-4"></i>
+                            Export Reports
+                        </button>
+                        <button class="bg-primary-600 hover:bg-primary-500 text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-semibold transition-all shadow-lg shadow-primary-600/20">
+                            <i data-feather="plus" class="w-4 h-4"></i>
+                            New Interview
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="glass-panel p-6 rounded-2xl">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-10 h-10 bg-primary-500/10 rounded-xl flex items-center justify-center">
+                                <i data-feather="users" class="w-5 h-5 text-primary-400"></i>
+                            </div>
+                            <span class="text-xs font-bold text-green-400">+12%</span>
                         </div>
-                        <div class="flex items-center gap-4">
-                            <nexus-model-selector></nexus-model-selector>
-                            <a href="interview.html" class="px-6 py-3 bg-primary-600 hover:bg-primary-500 text-white font-semibold rounded-xl transition-colors flex items-center gap-2 shadow-lg shadow-primary-600/20">
-                                <i data-feather="plus" class="w-5 h-5"></i>
-                                <span>New Interview</span>
-                            </a>
-                        </div>
+                        <div class="text-2xl font-bold text-white">128</div>
+                        <div class="text-sm text-slate-500">Total Interviews</div>
                     </div>
 
-                    <!-- Stats Row -->
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                        <div class="glass-panel rounded-xl p-6">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="w-10 h-10 bg-primary-500/20 rounded-lg flex items-center justify-center">
-                                    <i data-feather="users" class="w-5 h-5 text-primary-400"></i>
-                                </div>
-                                <span class="text-xs font-medium text-secondary-400 bg-secondary-500/10 px-2 py-1 rounded-full">+12%</span>
+                    <div class="glass-panel p-6 rounded-2xl">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-10 h-10 bg-secondary-500/10 rounded-xl flex items-center justify-center">
+                                <i data-feather="activity" class="w-5 h-5 text-secondary-400"></i>
                             </div>
-                            <div class="text-2xl font-bold text-white mb-1">248</div>
-                            <div class="text-sm text-slate-400">Active Candidates</div>
+                            <span class="text-xs font-bold text-green-400">8.2s</span>
                         </div>
-
-                        <div class="glass-panel rounded-xl p-6">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="w-10 h-10 bg-secondary-500/20 rounded-lg flex items-center justify-center">
-                                    <i data-feather="check-circle" class="w-5 h-5 text-secondary-400"></i>
-                                </div>
-                                <span class="text-xs font-medium text-primary-400 bg-primary-500/10 px-2 py-1 rounded-full">+5%</span>
-                            </div>
-                            <div class="text-2xl font-bold text-white mb-1">1,429</div>
-                            <div class="text-sm text-slate-400">Completed Interviews</div>
-                        </div>
-
-                        <div class="glass-panel rounded-xl p-6">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="w-10 h-10 bg-orange-500/20 rounded-lg flex items-center justify-center">
-                                    <i data-feather="clock" class="w-5 h-5 text-orange-400"></i>
-                                </div>
-                                <span class="text-xs font-medium text-slate-400 bg-slate-700 px-2 py-1 rounded-full">Avg</span>
-                            </div>
-                            <div class="text-2xl font-bold text-white mb-1">24m</div>
-                            <div class="text-sm text-slate-400">Interview Duration</div>
-                        </div>
-
-                        <div class="glass-panel rounded-xl p-6">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                                    <i data-feather="activity" class="w-5 h-5 text-purple-400"></i>
-                                </div>
-                                <span class="text-xs font-medium text-green-400 bg-green-500/10 px-2 py-1 rounded-full">98%</span>
-                            </div>
-                            <div class="text-2xl font-bold text-white mb-1">94.2</div>
-                            <div class="text-sm text-slate-400">Trust Score Avg</div>
-                        </div>
+                        <div class="text-2xl font-bold text-white">94%</div>
+                        <div class="text-sm text-slate-500">Avg. Trust Score</div>
                     </div>
 
-                    <!-- Active Interviews -->
-                    <div class="glass-panel rounded-2xl p-6 mb-8">
+                    <div class="glass-panel p-6 rounded-2xl">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-10 h-10 bg-purple-500/10 rounded-xl flex items-center justify-center">
+                                <i data-feather="clock" class="w-5 h-5 text-purple-400"></i>
+                            </div>
+                            <span class="text-xs font-bold text-red-400">-4%</span>
+                        </div>
+                        <div class="text-2xl font-bold text-white">42m</div>
+                        <div class="text-sm text-slate-500">Avg. Duration</div>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-2xl">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-10 h-10 bg-orange-500/10 rounded-xl flex items-center justify-center">
+                                <i data-feather="check-circle" class="w-5 h-5 text-orange-400"></i>
+                            </div>
+                            <span class="text-xs font-bold text-green-400">+18%</span>
+                        </div>
+                        <div class="text-2xl font-bold text-white">86</div>
+                        <div class="text-sm text-slate-500">Hired Candidates</div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                    <!-- Performance Chart -->
+                    <div class="lg:col-span-2 glass-panel p-6 rounded-2xl">
                         <div class="flex items-center justify-between mb-6">
-                            <h2 class="text-xl font-semibold text-white flex items-center gap-2">
-                                <i data-feather="radio" class="w-5 h-5 text-red-500 animate-pulse"></i>
-                                Live Interviews
-                            </h2>
-                            <button class="text-sm text-primary-400 hover:text-primary-300 font-medium">View All</button>
+                            <h3 class="text-lg font-bold text-white">Interview Performance Trends</h3>
+                            <nexus-model-selector></nexus-model-selector>
                         </div>
-                        
-                        <div class="space-y-4">
-                            <nexus-interview-card 
-                                name="Sarah Chen" 
-                                role="Senior Frontend Engineer" 
-                                status="live"
-                                model="GPT-4o"
-                                trust-score="96"
-                                duration="18:24"
-                                avatar="people">
-                            </nexus-interview-card>
-                            
-                            <nexus-interview-card 
-                                name="Marcus Johnson" 
-                                role="DevOps Engineer" 
-                                status="live"
-                                model="Gemini 1.5 Pro"
-                                trust-score="88"
-                                duration="32:15"
-                                avatar="technology">
-                            </nexus-interview-card>
-                            
-                            <nexus-interview-card 
-                                name="Emily Rodriguez" 
-                                role="Product Manager" 
-                                status="paused"
-                                model="Llama 3"
-                                trust-score="72"
-                                duration="45:00"
-                                avatar="office">
-                            </nexus-interview-card>
-                        </div>
-                    </div>
-
-                    <!-- Recent Assessments & Quick Actions -->
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        <div class="glass-panel rounded-2xl p-6">
-                            <h3 class="text-lg font-semibold text-white mb-4">Recent Completions</h3>
-                            <div class="space-y-3">
-                                <div class="flex items-center justify-between p-3 bg-slate-800/50 rounded-xl">
-                                    <div class="flex items-center gap-3">
-                                        <img src="https://static.photos/people/40x40/1" alt="Candidate" class="w-10 h-10 rounded-full object-cover">
-                                        <div>
-                                            <div class="font-medium text-white">David Park</div>
-                                            <div class="text-xs text-slate-400">Backend Engineer</div>
-                                        </div>
-                                    </div>
-                                    <nexus-trust-score score="94"></nexus-trust-score>
-                                </div>
-                                <div class="flex items-center justify-between p-3 bg-slate-800/50 rounded-xl">
-                                    <div class="flex items-center gap-3">
-                                        <img src="https://static.photos/people/40x40/2" alt="Candidate" class="w-10 h-10 rounded-full object-cover">
-                                        <div>
-                                            <div class="font-medium text-white">Lisa Wang</div>
-                                            <div class="text-xs text-slate-400">UI/UX Designer</div>
-                                        </div>
-                                    </div>
-                                    <nexus-trust-score score="98"></nexus-trust-score>
-                                </div>
-                                <div class="flex items-center justify-between p-3 bg-slate-800/50 rounded-xl">
-                                    <div class="flex items-center gap-3">
-                                        <img src="https://static.photos/people/40x40/3" alt="Candidate" class="w-10 h-10 rounded-full object-cover">
-                                        <div>
-                                            <div class="font-medium text-white">James Miller</div>
-                                            <div class="text-xs text-slate-400">Data Scientist</div>
-                                        </div>
-                                    </div>
-                                    <nexus-trust-score score="91"></nexus-trust-score>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="glass-panel rounded-2xl p-6">
-                            <h3 class="text-lg font-semibold text-white mb-4">Model Performance</h3>
-                            <div class="relative h-[200px] mb-4">
-                                <canvas id="modelPerformanceChart"></canvas>
-                            </div>
-                            <div class="mt-6 p-4 bg-slate-800/50 rounded-xl border border-slate-700">
-                                <div class="flex items-center gap-2 text-sm text-slate-300 mb-2">
-                                    <i data-feather="info" class="w-4 h-4"></i>
-                                    <span>Cost Optimization</span>
-                                </div>
-                                <p class="text-xs text-slate-400">Switching to Gemini for initial screenings saved $1,240 this month.</p>
-                            </div>
-                        </div>
-
-                        <div class="glass-panel rounded-2xl p-6">
-                            <h3 class="text-lg font-semibold text-white mb-6">Quick Actions</h3>
-                            <div class="space-y-4">
-                                <a href="interview.html" class="flex items-center gap-4 p-4 bg-primary-600/10 hover:bg-primary-600/20 border border-primary-600/20 rounded-xl transition-all group">
-                                    <div class="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center text-white shadow-lg shadow-primary-600/20 group-hover:scale-110 transition-transform">
-                                        <i data-feather="plus"></i>
-                                    </div>
-                                    <div>
-                                        <div class="font-semibold text-white">New Interview</div>
-                                        <div class="text-xs text-slate-400">Invite a new candidate</div>
-                                    </div>
-                                </a>
-                                <button class="w-full flex items-center gap-4 p-4 bg-slate-800/50 hover:bg-slate-800 border border-slate-700 rounded-xl transition-all group text-left">
-                                    <div class="w-10 h-10 bg-slate-700 rounded-lg flex items-center justify-center text-slate-300 group-hover:bg-slate-600 group-hover:text-white transition-colors">
-                                        <i data-feather="users"></i>
-                                    </div>
-                                    <div>
-                                        <div class="font-semibold text-white">Candidates</div>
-                                        <div class="text-xs text-slate-400">Manage talent pool</div>
-                                    </div>
-                                </button>
-                                <button class="w-full flex items-center gap-4 p-4 bg-slate-800/50 hover:bg-slate-800 border border-slate-700 rounded-xl transition-all group text-left">
-                                    <div class="w-10 h-10 bg-slate-700 rounded-lg flex items-center justify-center text-slate-300 group-hover:bg-slate-600 group-hover:text-white transition-colors">
-                                        <i data-feather="settings"></i>
-                                    </div>
-                                    <div>
-                                        <div class="font-semibold text-white">Settings</div>
-                                        <div class="text-xs text-slate-400">Configure platform</div>
-                                    </div>
-                                </button>
-                            </div>
+                        <div class="h-64 relative">
+                            <canvas id="performanceChart"></canvas>
                         </div>
                     </div>
 
                     <!-- System Status -->
-                    <div class="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div class="glass-panel rounded-xl p-4 flex items-center justify-between">
-                            <div class="flex items-center gap-3">
-                                <div class="w-2 h-2 rounded-full bg-secondary-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
-                                <span class="text-sm font-medium text-slate-200">GPT-4o</span>
+                    <div class="glass-panel p-6 rounded-2xl">
+                        <h3 class="text-lg font-bold text-white mb-6">System Status</h3>
+                        <div class="space-y-6">
+                            <div>
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span class="text-slate-400">API Latency</span>
+                                    <span class="text-green-400">Healthy (142ms)</span>
+                                </div>
+                                <div class="w-full bg-slate-800 rounded-full h-1.5">
+                                    <div class="bg-green-500 h-1.5 rounded-full" style="width: 85%"></div>
+                                </div>
                             </div>
-                            <span class="text-[10px] uppercase tracking-wider text-secondary-400 font-bold">Online</span>
-                        </div>
-                        <div class="glass-panel rounded-xl p-4 flex items-center justify-between">
-                            <div class="flex items-center gap-3">
-                                <div class="w-2 h-2 rounded-full bg-secondary-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
-                                <span class="text-sm font-medium text-slate-200">Gemini 1.5 Pro</span>
+                            <div>
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span class="text-slate-400">LLM Queue</span>
+                                    <span class="text-primary-400">Normal (2)</span>
+                                </div>
+                                <div class="w-full bg-slate-800 rounded-full h-1.5">
+                                    <div class="bg-primary-500 h-1.5 rounded-full" style="width: 30%"></div>
+                                </div>
                             </div>
-                            <span class="text-[10px] uppercase tracking-wider text-secondary-400 font-bold">Online</span>
-                        </div>
-                        <div class="glass-panel rounded-xl p-4 flex items-center justify-between">
-                            <div class="flex items-center gap-3">
-                                <div class="w-2 h-2 rounded-full bg-secondary-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
-                                <span class="text-sm font-medium text-slate-200">Llama 3</span>
-                            </div>
-                            <span class="text-[10px] uppercase tracking-wider text-secondary-400 font-bold">Online</span>
-                        </div>
-                        <div class="glass-panel rounded-xl p-4 flex items-center justify-between">
-                            <div class="flex items-center gap-3">
-                                <div class="w-2 h-2 rounded-full bg-secondary-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
-                                <span class="text-sm font-medium text-slate-200">Claude 3.5</span>
-                            </div>
-                            <span class="text-[10px] uppercase tracking-wider text-secondary-400 font-bold">Online</span>
-                        </div>
-                    </div>
-
-                    <!-- Live Activity Feed -->
-                    <div class="mt-8 glass-panel rounded-2xl p-6">
-                        <h3 class="text-lg font-semibold text-white mb-6 flex items-center gap-2">
-                            <i data-feather="activity" class="w-5 h-5 text-primary-400"></i>
-                            Live Activity Feed
-                        </h3>
-                        <div id="activity-feed" class="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-                            <!-- Activities will be injected here -->
-                            <div class="flex gap-4 p-3 rounded-lg bg-slate-800/30 border border-slate-700/50 animate-fade-in">
-                                <div class="w-2 h-2 mt-2 rounded-full bg-secondary-500"></div>
-                                <div>
-                                    <p class="text-sm text-slate-200">System <span class="text-slate-400">initialized successfully</span></p>
-                                    <p class="text-xs text-slate-500 mt-1">Just now</p>
+                            <div>
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span class="text-slate-400">Storage Usage</span>
+                                    <span class="text-orange-400">Warning (78%)</span>
+                                </div>
+                                <div class="w-full bg-slate-800 rounded-full h-1.5">
+                                    <div class="bg-orange-500 h-1.5 rounded-full" style="width: 78%"></div>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="mt-8 pt-6 border-t border-slate-800">
+                            <div class="flex items-center gap-2 text-xs text-slate-500">
+                                <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                                All systems operational
+                            </div>
+                        </div>
                     </div>
-                    <nexus-footer class="mt-8"></nexus-footer>
+                </div>
+
+                <!-- Live Feed & Active Interviews -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2">
+                        <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                            Recent Interviews
+                            <span class="bg-slate-800 text-slate-400 px-2 py-0.5 rounded text-xs font-medium">12 New</span>
+                        </h3>
+                        <div class="space-y-4" id="interviews-list">
+                            <nexus-interview-card
+                                name="Sarah Chen"
+                                role="Senior Frontend Engineer"
+                                avatar="people"
+                                status="live"
+                                trust-score="94"
+                                duration="Just now"
+                            ></nexus-interview-card>
+
+                            <nexus-interview-card
+                                name="James Wilson"
+                                role="Fullstack Developer"
+                                avatar="people"
+                                status="completed"
+                                trust-score="82"
+                                duration="2 hours ago"
+                            ></nexus-interview-card>
+
+                            <nexus-interview-card
+                                name="Aria Smith"
+                                role="DevOps Engineer"
+                                avatar="people"
+                                status="review"
+                                trust-score="76"
+                                duration="Yesterday"
+                            ></nexus-interview-card>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-6">Live Activity Feed</h3>
+                        <div class="glass-panel rounded-2xl overflow-hidden">
+                            <div class="h-[400px] overflow-y-auto p-4 space-y-4 custom-scrollbar" id="activity-feed">
+                                <!-- Activity items will be populated by dashboard.js -->
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </main>
         </div>
     </div>
 
-    <script src="script.js"></script>
-    <script src="dashboard.js"></script>
+    <script type="module" src="script.js"></script>
+    <script type="module" src="dashboard.js"></script>
 </body>
 </html>

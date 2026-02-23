@@ -1,4 +1,5 @@
 // frontend/dashboard.js - Dashboard specific logic
+import Chart from 'chart.js/auto';
 
 document.addEventListener('DOMContentLoaded', () => {
     initModelPerformanceChart();
@@ -36,7 +37,7 @@ function updateDashboardStats(interviews) {
 }
 
 function initModelPerformanceChart() {
-    const canvas = document.getElementById('modelPerformanceChart');
+    const canvas = document.getElementById('performanceChart');
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
