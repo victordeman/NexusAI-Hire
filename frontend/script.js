@@ -1,4 +1,10 @@
 // NexusAI Hire - Shared JavaScript
+import feather from 'feather-icons';
+import Alpine from 'alpinejs';
+
+// Make them available globally for legacy/inline scripts if needed
+window.feather = feather;
+window.Alpine = Alpine;
 
 // Utility Functions
 const Utils = {
@@ -82,6 +88,67 @@ const Utils = {
     }
 };
 
+// Voice Input (Web Speech API)
+const Voice = {
+    recognition: null,
+    isListening: false,
+
+    init: (onResult, onError) => {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            Utils.log('Speech Recognition not supported in this browser', 'error');
+            return false;
+        }
+
+        if (!Voice.recognition) {
+            Voice.recognition = new SpeechRecognition();
+            Voice.recognition.continuous = false;
+            Voice.recognition.interimResults = true;
+            Voice.recognition.lang = 'en-US';
+
+            Voice.recognition.onresult = (event) => {
+                const transcript = Array.from(event.results)
+                    .map(result => result[0])
+                    .map(result => result.transcript)
+                    .join('');
+                
+                if (onResult) onResult(transcript, event.results[0].isFinal);
+            };
+
+            Voice.recognition.onerror = (event) => {
+                Utils.log(`Speech Recognition Error: ${event.error}`, 'error');
+                Voice.isListening = false;
+                if (onError) onError(event.error);
+            };
+
+            Voice.recognition.onend = () => {
+                Voice.isListening = false;
+                document.dispatchEvent(new CustomEvent('voice-end'));
+            };
+        }
+
+        return true;
+    },
+
+    start: () => {
+        if (!Voice.recognition) return;
+        try {
+            Voice.recognition.start();
+            Voice.isListening = true;
+            document.dispatchEvent(new CustomEvent('voice-start'));
+            Utils.log('Speech Recognition started');
+        } catch (err) {
+            Utils.log(`Failed to start Speech Recognition: ${err.message}`, 'error');
+        }
+    },
+
+    stop: () => {
+        if (!Voice.recognition) return;
+        Voice.recognition.stop();
+        Voice.isListening = false;
+    }
+};
+
 // API Integration
 const API = {
     // Real API call to get LLM response
@@ -146,36 +213,6 @@ const API = {
         } catch (error) {
             Utils.log(`API Error: ${error.message}`, 'error');
             throw error;
-        }
-    },
-
-    // Real API call to report proctoring event
-    reportProctorEvent: async (interviewId, eventType, snapshot = null) => {
-        try {
-            if (!interviewId) return null;
-            
-            const headers = { 'Content-Type': 'application/json' };
-            const token = NexusAI.Auth.getToken();
-            if (token) headers['Authorization'] = `Bearer ${token}`;
-
-            const response = await fetch('/api/v1/proctor/report', {
-                method: 'POST',
-                headers: headers,
-                body: JSON.stringify({
-                    interview_id: interviewId,
-                    event_type: eventType,
-                    snapshot: snapshot
-                })
-            });
-
-            if (!response.ok) throw new Error(`Server responded with ${response.status}`);
-            
-            const data = await response.json();
-            Utils.log(`Proctor event reported: ${eventType}`, 'warning');
-            return data;
-        } catch (error) {
-            Utils.log(`Proctor API Error: ${error.message}`, 'error');
-            return null;
         }
     },
 
@@ -351,9 +388,12 @@ const ThemeManager = {
 document.addEventListener('DOMContentLoaded', () => {
     ThemeManager.init();
     
-    // Initialize Feather Icons if not already done
-    if (typeof feather !== 'undefined') {
-        feather.replace();
+    // Initialize Feather Icons
+    feather.replace();
+
+    // Start Alpine if not already started
+    if (!Alpine.started) {
+        Alpine.start();
     }
 
     // Add smooth scroll behavior
@@ -366,6 +406,7 @@ document.addEventListener('DOMContentLoaded', () => {
 window.NexusAI = {
     Utils,
     API,
+    Voice,
     UI,
     ThemeManager
 };
