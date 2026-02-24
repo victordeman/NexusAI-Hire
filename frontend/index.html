@@ -18,11 +18,9 @@
 
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/feather-icons"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="auth.js"></script>
-    <script src="components/navbar.js"></script>
-    <script src="components/footer.js"></script>
+    <script type="module" src="auth.js"></script>
+    <script type="module" src="components/navbar.js"></script>
+    <script type="module" src="components/footer.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -80,7 +78,7 @@
 
     <!-- Hero Section -->
     <section class="relative min-h-screen flex items-center justify-center overflow-hidden hero-gradient">
-        <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%234f46e5" fill-opacity="0.05"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width=%2260%22%20height=%2260%22%20viewBox=%220%200%2060%2060%22%20xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg%20fill=%22none%22%20fill-rule=%22evenodd%22%3E%3Cg%20fill=%22%234f46e5%22%20fill-opacity=%220.05%22%3E%3Cpath%20d=%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
         
         <div class="container mx-auto px-6 relative z-10">
             <div class="max-w-4xl mx-auto text-center">
@@ -462,14 +460,14 @@
 
     <nexus-footer></nexus-footer>
 
-    <script src="script.js"></script>
-    <script>
-        function toggleAuthForm() {
+    <script type="module" src="script.js"></script>
+    <script type="module">
+        window.toggleAuthForm = function() {
             document.getElementById('login-form').classList.toggle('hidden');
             document.getElementById('signup-form').classList.toggle('hidden');
         }
 
-        async function handleLogin() {
+        window.handleLogin = async function() {
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
             const btn = document.getElementById('login-btn');
@@ -489,7 +487,7 @@
             }
         }
 
-        async function handleSignUp() {
+        window.handleSignUp = async function() {
             const email = document.getElementById('signup-email').value;
             const password = document.getElementById('signup-password').value;
             const btn = document.getElementById('signup-btn');
@@ -512,7 +510,7 @@
         }
 
         // Modal Form Handling
-        function handleDemoRequest() {
+        window.handleDemoRequest = function() {
             NexusAI.UI.Forms.handleDemoRequest(
                 '#demo-modal input[type="email"]',
                 '#demo-submit-btn',
