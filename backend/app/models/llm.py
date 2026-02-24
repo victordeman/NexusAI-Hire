@@ -1,4 +1,5 @@
 import logging
+import sentry_sdk
 from litellm import acompletion
 from litellm.exceptions import OpenAIError
 from app.config import settings
@@ -35,8 +36,18 @@ async def get_llm_response(
         if settings.LITELLM_BASE_URL:
             completion_params["api_base"] = settings.LITELLM_BASE_URL
             
-        response = await acompletion(**completion_params)
+        with sentry_sdk.start_span(op="llm.completion", name=f"LiteLLM: {selected_model}"):
+            response = await acompletion(**completion_params)
         
+        # Capture token usage
+        usage = getattr(response, 'usage', None)
+        if usage:
+            sentry_sdk.set_tag("llm.model", selected_model)
+            sentry_sdk.set_extra("llm.usage.prompt_tokens", getattr(usage, 'prompt_tokens', 0))
+            sentry_sdk.set_extra("llm.usage.completion_tokens", getattr(usage, 'completion_tokens', 0))
+            sentry_sdk.set_extra("llm.usage.total_tokens", getattr(usage, 'total_tokens', 0))
+            logger.info(f"LLM Usage: {usage}")
+
         logger.info(f"Successfully received response from {selected_model}")
         return response.choices[0].message.content
 
@@ -77,7 +88,13 @@ async def get_llm_streaming_response(
         if settings.LITELLM_BASE_URL:
             completion_params["api_base"] = settings.LITELLM_BASE_URL
             
-        response = await acompletion(**completion_params)
+        with sentry_sdk.start_span(op="llm.completion.stream", name=f"LiteLLM Stream: {selected_model}"):
+            response = await acompletion(**completion_params)
+        
+        # Note: Usage for streaming is usually only available in the last chunk
+        # and depends on the provider/LiteLLM settings.
+        # For now, we just trace the call start.
+        
         return response
 
     except OpenAIError as e:
