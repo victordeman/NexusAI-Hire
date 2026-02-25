@@ -1,12 +1,48 @@
 // frontend/dashboard.js - Dashboard specific logic
 import Chart from 'chart.js/auto';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    const isAdmin = await checkAdminAccess();
+    if (!isAdmin) return;
+
     initModelPerformanceChart();
     initActivityFeed();
     initLiveStats();
     loadRealInterviews();
 });
+
+async function checkAdminAccess() {
+    if (!window.NexusAI || !window.NexusAI.Auth || !window.NexusAI.Auth.isAuthenticated()) {
+        window.location.href = 'index.html';
+        return false;
+    }
+
+    try {
+        const response = await fetch('/api/v1/profile/me', {
+            headers: {
+                'Authorization': `Bearer ${window.NexusAI.Auth.getToken()}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch profile');
+        }
+
+        const profile = await response.json();
+
+        if (!profile || !profile.is_admin) {
+            alert('Access Denied: Only administrators can view the dashboard.');
+            window.location.href = 'index.html';
+            return false;
+        }
+
+        return true;
+    } catch (error) {
+        console.error('Auth check failed', error);
+        window.location.href = 'index.html';
+        return false;
+    }
+}
 
 async function loadRealInterviews() {
     if (window.NexusAI && window.NexusAI.Auth && window.NexusAI.Auth.isAuthenticated()) {

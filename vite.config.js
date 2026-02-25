@@ -12,6 +12,7 @@ export default defineConfig({
         main: resolve(__dirname, 'frontend/index.html'),
         interview: resolve(__dirname, 'frontend/interview.html'),
         dashboard: resolve(__dirname, 'frontend/dashboard.html'),
+        register: resolve(__dirname, 'frontend/register.html'),
       },
     },
   },

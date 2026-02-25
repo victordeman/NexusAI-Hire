@@ -7,6 +7,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from app.api.v1.interview import router as interview_router
+from app.api.v1.profile import router as profile_router
 from app.config import settings
 
 # Initialize Sentry
@@ -64,6 +65,7 @@ async def log_requests(request: Request, call_next):
 
 # Mount the interview router at /api/v1
 app.include_router(interview_router, prefix="/api/v1")
+app.include_router(profile_router, prefix="/api/v1/profile", tags=["profile"])
 
 @app.get("/health")
 async def health_check():
